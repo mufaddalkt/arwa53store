@@ -592,35 +592,7 @@ function ProductModal({ product, onClose, isWishlisted, onToggleWishlist, onNavi
 
           <p className="text-sm leading-relaxed" style={{ color: C.inkSoft }}>{product.desc}</p>
 
-          {/* Store Availability Card */}
-          <div
-            className="p-3.5 rounded-2xl flex items-start gap-3 transition-colors"
-            style={{ background: `${C.peach}88`, border: `1px solid rgba(201,162,39,0.25)` }}
-          >
-            <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5" style={{ background: C.gold, color: C.cream }}>
-              <MapPin size={15} />
-            </div>
-            <div className="flex-1">
-              <p className="text-xs font-bold" style={{ color: C.ink }}>Available for In-Store Preview</p>
-              <p className="text-[11px] leading-snug mt-0.5" style={{ color: C.inkSoft }}>
-                Try this piece at our jewellery store: <span className="font-semibold text-stone-800">Near Mewad Hospital, opp. Vaibhav Opticals, Nai Abadi, Banswara</span>.
-              </p>
-              <p className="text-[10.5px] mt-1 font-medium text-stone-600">
-                Call / WhatsApp: <a href={`tel:${STORE_INFO.phone1}`} className="underline font-bold">{STORE_INFO.phone1}</a> • <a href={`tel:${STORE_INFO.phone2}`} className="underline font-bold">{STORE_INFO.phone2}</a>
-              </p>
-              <button
-                onClick={() => {
-                  onClose();
-                  onNavigateLocation();
-                }}
-                className="text-[11px] font-bold mt-1.5 flex items-center gap-1 hover:underline"
-                style={{ color: C.goldDark }}
-              >
-                <span>View Store Location & Timings</span>
-                <ChevronRight size={12} />
-              </button>
-            </div>
-          </div>
+
 
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-2.5 pt-1">
@@ -2830,20 +2802,7 @@ function App() {
             <span>{visitorCount ? visitorCount.toLocaleString() : '1,285'} Visits</span>
           </div>
 
-          {/* Location Badge (Click to scroll to store location) */}
-          <button
-            onClick={scrollToLocation}
-            className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-all hover:shadow-sm active:scale-95"
-            style={{
-              background: '#FFFFFF',
-              border: `1px solid rgba(201,162,39,0.35)`,
-              color: C.ink,
-            }}
-            title="View store location in Banswara"
-          >
-            <MapPin size={13} style={{ color: C.goldDark }} />
-            <span>Nai Abadi, Banswara</span>
-          </button>
+
 
           {/* Direct Call Header Button */}
           <a
@@ -2887,15 +2846,7 @@ function App() {
             )}
           </button>
 
-          {/* Visit Store Button */}
-          <button
-            onClick={scrollToLocation}
-            className="flex sm:hidden p-2 rounded-full hover:bg-black/5"
-            style={{ color: C.goldDark }}
-            title="Store Location"
-          >
-            <MapPin size={19} />
-          </button>
+
         </div>
       </header>
 
@@ -2938,14 +2889,7 @@ function App() {
 
             {/* Quick Hero Location & Contact Indicator */}
             <div className="mt-3.5 flex items-center justify-center gap-2 flex-wrap">
-              <button
-                onClick={scrollToLocation}
-                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold transition-transform active:scale-95"
-                style={{ background: `${C.cream}`, border: `1px solid ${C.gold}`, color: C.ink }}
-              >
-                <MapPin size={12} style={{ color: C.goldDark }} />
-                <span>Store: Near Mewad Hospital, Nai Abadi, Banswara</span>
-              </button>
+
 
               <a
                 href={`tel:${STORE_INFO.phone1}`}
@@ -3012,15 +2956,7 @@ function App() {
             })}
           </div>
 
-          <button
-            onClick={scrollToLocation}
-            className="text-xs font-bold flex items-center gap-1.5 px-3 py-2 rounded-xl transition-all hover:bg-black/5"
-            style={{ color: C.goldDark }}
-          >
-            <MapPin size={14} />
-            <span>Store & Contacts</span>
-            <ChevronRight size={12} />
-          </button>
+
         </div>
 
         {!ready ? (
