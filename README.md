@@ -33,8 +33,10 @@ A modern, high-performance, single-page luxury jewellery web application showcas
 
 | Attribute | Details |
 | :--- | :--- |
-| **Store Name** | Arwa 53 Collection |
-| **Address** | Near Mewad Hospital, Just opposite Vaibhav Opticals, Nai Abadi, Banswara, Rajasthan, India |
+| **Store Listing** | Arwa53 collection - Imitation Jewellery |
+| **Address** | HC2W+PRQ, Near Mewad Hospital, Opposite Vaibhav Opticals, Najmi Bagh, Nai Abadi, Banswara, Rajasthan 327001, India |
+| **Coordinates** | `23.551843, 74.447071` |
+| **Plus Code** | `HC2W+PRQ, Banswara` |
 | **Primary Phone** | [+91 8949540902](tel:+918949540902) |
 | **Secondary Phone**| [+91 8619338794](tel:+918619338794) |
 | **Mon – Sat Hours**| 10:30 AM – 8:30 PM |

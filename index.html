@@ -65,9 +65,11 @@ const CATEGORY_ICON = {
 /* ------------------------------------------------------------------ */
 const STORE_INFO = {
   name: "Arwa 53 Collection",
-  tagline: "Exclusive Gold & Fine Jewellery Boutique",
-  address: "Near Mewad Hospital, Just opposite Vaibhav Opticals, Nai Abadi, Banswara, Rajasthan, India",
-  shortAddress: "Nai Abadi, Banswara, Rajasthan",
+  tagline: "Exclusive Gold & Fine Imitation Jewellery Boutique",
+  address: "HC2W+PRQ, Near Mewad Hospital, Opposite Vaibhav Opticals, Najmi Bagh, Nai Abadi, Banswara, Rajasthan 327001, India",
+  shortAddress: "Najmi Bagh, Nai Abadi, Banswara, Rajasthan",
+  plusCode: "HC2W+PRQ, Banswara",
+  coordinates: "23.551843, 74.447071",
   phone1: "+91 8949540902",
   phone2: "+91 8619338794",
   phone1Raw: "918949540902",
@@ -77,21 +79,21 @@ const STORE_INFO = {
     { number: "+91 8619338794", label: "Boutique Support & Visit Inquiries", raw: "918619338794" },
   ],
   landmarks: [
-    { title: "Near Mewad Hospital", subtitle: "Prominent medical landmark on main road", icon: Building2 },
     { title: "Opposite Vaibhav Opticals", subtitle: "Directly facing across the street", icon: Compass },
-    { title: "Nai Abadi, Banswara", subtitle: "Prime jewellery shopping destination, Rajasthan", icon: MapPin },
+    { title: "Near Mewad Hospital", subtitle: "Shree Mewar Multispeciality Hospital", icon: Building2 },
+    { title: "Najmi Bagh, Nai Abadi", subtitle: "Banswara, Rajasthan 327001", icon: MapPin },
   ],
   hours: [
     { days: "Monday – Saturday", time: "10:30 AM – 8:30 PM", badge: "Open Daily" },
     { days: "Sunday", time: "11:00 AM – 6:00 PM", badge: "Weekend Hours" },
   ],
-  googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Near+Mewad+Hospital,+Just+opposite+Vaibhav+Opticals,+Nai+Abadi,+Banswara,+Rajasthan,+India",
-  mapEmbedUrl: "https://maps.google.com/maps?q=Near+Mewad+Hospital,+Just+opposite+Vaibhav+Opticals,+Nai+Abadi,+Banswara,+Rajasthan,+India&t=&z=16&ie=UTF8&iwloc=&output=embed",
-  whatsappUrl: "https://wa.me/918949540902?text=Hello%20Arwa%2053%20Collection%2C%20I%20would%20like%20to%20inquire%20about%20visiting%20your%20boutique%20at%20Near%20Mewad%20Hospital%2C%20Nai%20Abadi%2C%20Banswara.",
+  googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=23.551843,74.447071",
+  mapEmbedUrl: "https://maps.google.com/maps?q=23.551843,74.447071+(Arwa53+collection+-+Imitation+Jewellery)&hl=en&z=18&output=embed",
+  whatsappUrl: "https://wa.me/918949540902?text=Hello%20Arwa%2053%20Collection%2C%20I%20would%20like%20to%20inquire%20about%20visiting%20your%20boutique%20at%20Nai%20Abadi%2C%20Banswara.",
   whatsappUrl2: "https://wa.me/918619338794?text=Hello%20Arwa%2053%20Collection%2C%20I%20would%20like%20to%20inquire%20about%20your%20jewellery%20collection.",
   features: [
     "In-Store Try-on & Styling",
-    "Certified Gold & Craftsmanship",
+    "Certified Craftsmanship",
     "Custom Resizing & Orders",
     "Luxury Gift Packaging",
   ],
@@ -932,8 +934,8 @@ function BoutiqueSection({ onCopyAddress, onCopyPhone }) {
                   <MapPin size={14} />
                 </div>
                 <div>
-                  <h4 className="text-xs font-bold leading-tight" style={{ color: C.ink }}>Interactive Store Map</h4>
-                  <p className="text-[10px] text-stone-500 font-medium">Nai Abadi, Banswara, Rajasthan</p>
+                  <h4 className="text-xs font-bold leading-tight" style={{ color: C.ink }}>Arwa53 Collection</h4>
+                  <p className="text-[10px] text-stone-500 font-medium">Opp. Vaibhav Opticals, Nai Abadi, Banswara</p>
                 </div>
               </div>
 
@@ -953,7 +955,7 @@ function BoutiqueSection({ onCopyAddress, onCopyPhone }) {
             </div>
 
             {/* Embedded Google Maps iFrame */}
-            <div className="w-full h-[260px] sm:h-[280px] relative bg-stone-100">
+            <div className="w-full h-[270px] sm:h-[300px] relative bg-stone-100">
               <iframe
                 title="Arwa 53 Collection Location Map"
                 src={STORE_INFO.mapEmbedUrl}
@@ -972,7 +974,7 @@ function BoutiqueSection({ onCopyAddress, onCopyPhone }) {
               className="px-4 py-2.5 text-[11px] font-medium flex items-center justify-between"
               style={{ background: `${C.peach}55`, color: C.inkSoft }}
             >
-              <span className="truncate">Near Mewad Hospital • Opp. Vaibhav Opticals</span>
+              <span className="truncate">Near Mewad Hospital • Opp. Vaibhav Opticals (HC2W+PRQ)</span>
               <a
                 href={STORE_INFO.googleMapsUrl}
                 target="_blank"
