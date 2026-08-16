@@ -93,6 +93,64 @@ const C = {
 };
 
 const LOGO_SRC = window.LOGO_SRC;
+
+const CATEGORIES = ['All', 'Bracelets'];
+
+const CATEGORY_ICON = {
+  Bracelets: CircleDot,
+};
+
+/* ------------------------------------------------------------------ */
+/*  Store & Boutique Information — Physical Location in Banswara       */
+/* ------------------------------------------------------------------ */
+const DEFAULT_STORE_INFO = {
+  name: "Arwa 53 Collection",
+  tagline: "Exclusive Gold & Fine Imitation Jewellery Boutique",
+  address: "HC2W+PRQ, Near Mewad Hospital, Opposite Vaibhav Opticals, Najmi Bagh, Nai Abadi, Banswara, Rajasthan 327001, India",
+  shortAddress: "Najmi Bagh, Nai Abadi, Banswara, Rajasthan",
+  plusCode: "HC2W+PRQ, Banswara",
+  coordinates: "23.551843, 74.447071",
+  phone1: "+91 8949540902",
+  phone2: "+91 8619338794",
+  phone1Raw: "918949540902",
+  phone2Raw: "918619338794",
+  contacts: [
+    { number: "+91 8949540902", label: "Primary Concierge & Orders", raw: "918949540902" },
+    { number: "+91 8619338794", label: "Boutique Support & Visit Inquiries", raw: "918619338794" },
+  ],
+  landmarks: [
+    { title: "Opposite Vaibhav Opticals", subtitle: "Directly facing across the street", icon: Compass },
+    { title: "Near Mewad Hospital", subtitle: "Shree Mewar Multispeciality Hospital", icon: Building2 },
+    { title: "Najmi Bagh, Nai Abadi", subtitle: "Banswara, Rajasthan 327001", icon: MapPin },
+  ],
+  hours: [
+    { days: "Monday – Saturday", time: "10:30 AM – 8:30 PM", badge: "Open Daily" },
+    { days: "Sunday", time: "11:00 AM – 6:00 PM", badge: "Weekend Hours" },
+  ],
+  googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=23.551843,74.447071",
+  mapEmbedUrl: "https://maps.google.com/maps?q=23.551843,74.447071&hl=en&z=18&t=m&output=embed",
+  whatsappUrl: "https://wa.me/918949540902?text=Hello%20Arwa%2053%20Collection%2C%20I%20would%20like%20to%20inquire%20about%20visiting%20your%20boutique%20at%20Nai%20Abadi%2C%20Banswara.",
+  whatsappUrl2: "https://wa.me/918619338794?text=Hello%20Arwa%2053%20Collection%2C%20I%20would%20like%20to%20inquire%20about%20your%20jewellery%20collection.",
+  features: [
+    "In-Store Try-on & Styling",
+    "Certified Craftsmanship",
+    "Custom Resizing & Orders",
+    "Luxury Gift Packaging",
+  ],
+};
+
+function loadStoreInfo() {
+  try {
+    const raw = localStorage.getItem('arwa53_custom_store_info');
+    if (raw) return { ...DEFAULT_STORE_INFO, ...JSON.parse(raw) };
+  } catch (e) {}
+  return DEFAULT_STORE_INFO;
+}
+let STORE_INFO = loadStoreInfo();
+
+/* ------------------------------------------------------------------ */
+/*  Product photos — real Arwa 53 Collection inventory                 */
+/* ------------------------------------------------------------------ */
 const PRODUCT_IMAGES = window.PRODUCT_IMAGES;
 
 /* ------------------------------------------------------------------ */
