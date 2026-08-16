@@ -9,84 +9,52 @@
 <link rel="apple-touch-icon" id="dynamic-apple-favicon" />
 <script>
 (function() {
-  function generateFavicon() {
+  function renderLogoFavicon() {
     try {
-      const canvas = document.createElement('canvas');
-      canvas.width = 64;
-      canvas.height = 64;
-      const ctx = canvas.getContext('2d');
-      if (!ctx) return;
+      if (!window.LOGO_SRC) {
+        setTimeout(renderLogoFavicon, 50);
+        return;
+      }
+      const img = new Image();
+      img.onload = function() {
+        const canvas = document.createElement('canvas');
+        canvas.width = 128;
+        canvas.height = 128;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
 
-      // Background circle with luxury dark obsidian & gold gradient
-      const bgGrad = ctx.createRadialGradient(32, 32, 2, 32, 32, 32);
-      bgGrad.addColorStop(0, '#3A2818');
-      bgGrad.addColorStop(0.85, '#21150C');
-      bgGrad.addColorStop(1, '#160E08');
-      ctx.fillStyle = bgGrad;
-      ctx.beginPath();
-      ctx.arc(32, 32, 30, 0, Math.PI * 2);
-      ctx.fill();
+        // Circular clipping
+        ctx.beginPath();
+        ctx.arc(64, 64, 63, 0, Math.PI * 2);
+        ctx.closePath();
+        ctx.clip();
 
-      // Metallic Gold Outer Ring
-      const ringGrad = ctx.createLinearGradient(0, 0, 64, 64);
-      ringGrad.addColorStop(0, '#FFE599');
-      ringGrad.addColorStop(0.3, '#E8C468');
-      ringGrad.addColorStop(0.7, '#C9A227');
-      ringGrad.addColorStop(1, '#8C670D');
-      ctx.strokeStyle = ringGrad;
-      ctx.lineWidth = 3;
-      ctx.stroke();
+        // Draw exact logo image
+        ctx.drawImage(img, 0, 0, 128, 128);
 
-      // Inner subtle gold glow ring
-      ctx.beginPath();
-      ctx.arc(32, 32, 26, 0, Math.PI * 2);
-      ctx.strokeStyle = 'rgba(232, 196, 104, 0.35)';
-      ctx.lineWidth = 1;
-      ctx.stroke();
+        // Gold border stroke for crisp visibility in browser tabs
+        ctx.beginPath();
+        ctx.arc(64, 64, 62, 0, Math.PI * 2);
+        ctx.strokeStyle = '#C9A227';
+        ctx.lineWidth = 3;
+        ctx.stroke();
 
-      // Sparkling Gem at top
-      ctx.fillStyle = '#FFEAA7';
-      ctx.beginPath();
-      ctx.arc(32, 14, 2.5, 0, Math.PI * 2);
-      ctx.fill();
-      // Star rays
-      ctx.strokeStyle = '#FFEAA7';
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.moveTo(32, 9); ctx.lineTo(32, 19);
-      ctx.moveTo(27, 14); ctx.lineTo(37, 14);
-      ctx.stroke();
-
-      // Luxury Serif Typography "53"
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.font = 'bold 24px "Playfair Display", Georgia, serif';
-      
-      const textGrad = ctx.createLinearGradient(16, 26, 48, 50);
-      textGrad.addColorStop(0, '#FFF3CC');
-      textGrad.addColorStop(0.5, '#E8C468');
-      textGrad.addColorStop(1, '#C9A227');
-      ctx.fillStyle = textGrad;
-      ctx.fillText('53', 32, 38);
-
-      // "ARWA" monogram above
-      ctx.font = 'bold 8px "Playfair Display", Georgia, serif';
-      ctx.fillStyle = '#E8C468';
-      ctx.fillText('ARWA', 32, 22);
-
-      const faviconUrl = canvas.toDataURL('image/png');
-      const faviconLink = document.getElementById('dynamic-favicon');
-      if (faviconLink) faviconLink.href = faviconUrl;
-      const appleFaviconLink = document.getElementById('dynamic-apple-favicon');
-      if (appleFaviconLink) appleFaviconLink.href = faviconUrl;
+        const faviconUrl = canvas.toDataURL('image/png');
+        const faviconLink = document.getElementById('dynamic-favicon');
+        if (faviconLink) faviconLink.href = faviconUrl;
+        const appleFaviconLink = document.getElementById('dynamic-apple-favicon');
+        if (appleFaviconLink) appleFaviconLink.href = faviconUrl;
+      };
+      img.src = window.LOGO_SRC;
     } catch(e) {
-      console.warn('Favicon generation error:', e);
+      console.warn('Logo favicon generation error:', e);
     }
   }
+
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', generateFavicon);
+    document.addEventListener('DOMContentLoaded', renderLogoFavicon);
   } else {
-    generateFavicon();
+    renderLogoFavicon();
   }
 })();
 </script>
