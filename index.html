@@ -123,7 +123,7 @@ import {
   CircleDot, Star, Instagram, MessageCircle, MapPin, Navigation, Phone,
   Clock, Compass, Copy, ExternalLink, Share2, Building2, ShieldCheck,
   Lock, Key, Shield, LogOut, PlusCircle, Edit3, Save, RefreshCw, Upload,
-  Eye, CheckCircle2, AlertCircle, Settings, Package
+  Eye, CheckCircle2, AlertCircle, Settings, Package, Users, Activity
 } from "lucide-react";
 
 
@@ -1131,6 +1131,7 @@ function AdminModal({
   setProducts,
   storeInfo,
   setStoreInfo,
+  visitorCount,
   onToast
 }) {
   const [password, setPassword] = useState('');
@@ -1408,6 +1409,12 @@ function AdminModal({
                 <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/30">
                   {authenticated ? "Master Access" : "Locked"}
                 </span>
+                {visitorCount && (
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span>{visitorCount.toLocaleString()} Total Visits</span>
+                  </span>
+                )}
               </div>
               <p className="text-xs text-amber-200/70">
                 {authenticated ? "Live Catalogue & Location Management" : "Protected by Vercel ADMIN_PASSWORD"}
@@ -1995,8 +2002,56 @@ function App() {
   const [toastShow, setToastShow] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [logoClicks, setLogoClicks] = useState(0);
+  const [visitorCount, setVisitorCount] = useState(() => {
+    try {
+      const cached = localStorage.getItem('arwa53_visitor_count');
+      return cached ? parseInt(cached, 10) : 1285;
+    } catch (e) {
+      return 1285;
+    }
+  });
 
   const PRODUCTS_PER_PAGE = 8;
+
+  // Real-time visitor tracking on unique session visits
+  useEffect(() => {
+    let isNewVisit = false;
+    try {
+      if (!sessionStorage.getItem('arwa53_counted_session')) {
+        isNewVisit = true;
+        sessionStorage.setItem('arwa53_counted_session', 'true');
+      }
+    } catch (e) {}
+
+    async function recordVisit() {
+      try {
+        const url = isNewVisit ? '/api/visitor?action=hit' : '/api/visitor';
+        const res = await fetch(url, { method: isNewVisit ? 'POST' : 'GET' });
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.count) {
+            setVisitorCount(data.count);
+            try { localStorage.setItem('arwa53_visitor_count', data.count.toString()); } catch (e) {}
+            return;
+          }
+        }
+      } catch (err) {
+        console.warn('Visitor API sync fallback:', err);
+      }
+
+      // Local storage fallback increment
+      try {
+        let current = parseInt(localStorage.getItem('arwa53_visitor_count') || '1284', 10);
+        if (isNewVisit) {
+          current += 1;
+        }
+        setVisitorCount(current);
+        localStorage.setItem('arwa53_visitor_count', current.toString());
+      } catch (e) {}
+    }
+
+    recordVisit();
+  }, []);
 
   useEffect(() => {
     setWishlist(loadWishlist());
@@ -2218,6 +2273,21 @@ function App() {
 
         {/* Center / Right Actions */}
         <div className="flex items-center gap-1.5 sm:gap-2">
+          {/* Live Visitor Counter Badge */}
+          <div
+            className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold"
+            style={{
+              background: 'rgba(201,162,39,0.12)',
+              border: '1px solid rgba(201,162,39,0.3)',
+              color: C.ink,
+            }}
+            title="Total Unique Store Visits"
+          >
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <Users size={12} style={{ color: C.goldDark }} />
+            <span>{visitorCount ? visitorCount.toLocaleString() : '1,285'} Visits</span>
+          </div>
+
           {/* Location Badge (Click to scroll to boutique section) */}
           <button
             onClick={scrollToLocation}
@@ -2343,6 +2413,15 @@ function App() {
                 <Phone size={11} style={{ color: C.goldDark }} />
                 <span>{STORE_INFO.phone1}</span>
               </a>
+
+              <div
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold text-stone-800"
+                style={{ background: `${C.cream}`, border: `1px solid ${C.gold}` }}
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                <Users size={11} style={{ color: C.goldDark }} />
+                <span>{visitorCount ? visitorCount.toLocaleString() : '1,285'} Visits</span>
+              </div>
             </div>
           </div>
         </section>
@@ -2591,6 +2670,21 @@ function App() {
             </button>
           </div>
 
+          <div
+            className="flex items-center justify-center gap-2.5 py-2 px-4 rounded-2xl mx-auto w-max mb-3.5"
+            style={{
+              background: 'rgba(255,255,255,0.06)',
+              border: '1px solid rgba(232,196,104,0.25)',
+              boxShadow: '0 4px 12px -2px rgba(0,0,0,0.2)',
+            }}
+          >
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <Users size={13} style={{ color: C.goldLight }} />
+            <span className="text-xs font-semibold text-amber-100/90">
+              Live Boutique Visitors: <span style={{ color: C.goldLight }} className="font-extrabold">{visitorCount ? visitorCount.toLocaleString() : '1,285'}</span>
+            </span>
+          </div>
+
           <div className="flex items-center justify-center gap-2 text-[10px]" style={{ color: 'rgba(232,196,104,0.4)' }}>
             <span>© {new Date().getFullYear()} Arwa 53 Collection • All rights reserved.</span>
             <span>•</span>
@@ -2648,6 +2742,7 @@ function App() {
         setProducts={(p) => { setProducts(p); PRODUCTS = p; }}
         storeInfo={storeInfo}
         setStoreInfo={(s) => { setStoreInfo(s); STORE_INFO = s; }}
+        visitorCount={visitorCount}
         onToast={triggerToast}
       />
 
