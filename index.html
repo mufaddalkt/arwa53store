@@ -501,11 +501,27 @@ function ProductCard({ product, onOpen, isWishlisted, onToggleWishlist, index = 
         </div>
         <div className="p-3.5 flex flex-col flex-1">
           <p className="text-[10px] uppercase tracking-wide font-semibold mb-0.5" style={{ color: C.goldDark }}>{product.category}</p>
-          <p className="text-[13.5px] font-bold leading-snug mb-1.5" style={{ color: C.ink, fontFamily: "'Playfair Display', serif" }}>
+          <p className="text-[13.5px] font-bold leading-snug mb-1.5 line-clamp-1" style={{ color: C.ink, fontFamily: "'Playfair Display', serif" }}>
             {product.name}
           </p>
-          <div className="mt-auto pt-1">
+          <div className="mt-auto pt-1 flex items-center justify-between">
             <span className="text-sm font-bold" style={{ color: C.ink }}>{formatINR(product.price)}</span>
+
+            {/* Quick WhatsApp Product Inquiry Icon */}
+            <a
+              href={`https://wa.me/${STORE_INFO.phone1Raw || '919929285353'}?text=${encodeURIComponent(`Hello Arwa 53 Collection, I would like to inquire about "${product.name}" (${formatINR(product.price)}). Is this available at your Nai Abadi, Banswara store?`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="w-7 h-7 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-90 text-white flex-shrink-0"
+              style={{
+                background: '#25D366',
+                boxShadow: '0 2px 8px -2px rgba(37,211,102,0.6)',
+              }}
+              title={`Inquire about ${product.name} on WhatsApp`}
+            >
+              <MessageCircle size={14} />
+            </a>
           </div>
         </div>
       </Card>
@@ -703,16 +719,29 @@ function WishlistModal({ isOpen, onClose, wishlist, onToggleWishlist, onSelectPr
                   <p className="text-sm font-bold truncate" style={{ color: C.ink, fontFamily: "'Playfair Display', serif" }}>{product.name}</p>
                   <p className="text-xs font-bold mt-0.5" style={{ color: C.ink }}>{formatINR(product.price)}</p>
                 </div>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onToggleWishlist(product.id);
-                  }}
-                  className="p-2 rounded-full hover:bg-red-50 text-red-700"
-                  title="Remove from wishlist"
-                >
-                  <Trash2 size={16} />
-                </button>
+                <div className="flex items-center gap-1">
+                  <a
+                    href={`https://wa.me/${STORE_INFO.phone1Raw || '919929285353'}?text=${encodeURIComponent(`Hello Arwa 53 Collection, I am inquiring about "${product.name}" (${formatINR(product.price)}) saved in my wishlist. Is this available at your Nai Abadi, Banswara store?`)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="w-8 h-8 rounded-full flex items-center justify-center transition-all hover:scale-110 active:scale-95 text-white"
+                    style={{ background: '#25D366' }}
+                    title={`Inquire about ${product.name} on WhatsApp`}
+                  >
+                    <MessageCircle size={15} />
+                  </a>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onToggleWishlist(product.id);
+                    }}
+                    className="p-2 rounded-full hover:bg-red-50 text-red-700"
+                    title="Remove from wishlist"
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                </div>
               </div>
             ))
           )}
