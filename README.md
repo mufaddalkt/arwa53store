@@ -6,7 +6,7 @@
 [![TailwindCSS](https://img.shields.io/badge/Tailwind-CSS-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 [![Vercel](https://img.shields.io/badge/Vercel-Serverless%20Ready-black?logo=vercel&logoColor=white)](https://vercel.com/)
 
-A modern, high-performance, single-page luxury jewellery web application showcasing the exclusive **Arwa 53 Collection** of gold bangles, bracelets, and bespoke jewellery pieces. Complete with physical boutique location details, embedded map frame, 8-item catalog pagination, interactive concierge actions, live wishlist drawer, direct WhatsApp / phone contact integration, and a **password-protected hidden admin panel**.
+A modern, high-performance, single-page luxury jewellery web application showcasing the exclusive **Arwa 53 Collection** of gold bangles, bracelets, and bespoke jewellery pieces. Complete with physical store location details, embedded map frame, 8-item catalog pagination, interactive concierge actions, live wishlist drawer, direct WhatsApp / phone contact integration, and a **password-protected hidden admin panel**.
 
 ---
 
@@ -15,15 +15,15 @@ A modern, high-performance, single-page luxury jewellery web application showcas
 - **💎 Curated Jewellery Showcase & 8-Item Pagination**:
   - Luxury catalog display with 8 products per page and intuitive page navigation controls.
   - Interactive product visual modals with shimmer typography and tilt-card hover micro-interactions.
-- **📍 Physical Boutique Integration & Embedded Map Frame**:
+- **📍 Physical Store Integration & Embedded Map Frame**:
   - Full store address: *HC2W+PRQ, Near Mewad Hospital, Opposite Vaibhav Opticals, Najmi Bagh, Nai Abadi, Banswara, Rajasthan 327001, India*.
-  - Embedded Google Map frame pinpointing the boutique near Mewad Hospital & Vaibhav Opticals.
+  - Embedded Google Map frame pinpointing the store near Mewad Hospital & Vaibhav Opticals.
   - Interactive Google Maps direct route & navigation links.
   - Visiting hours & timings (Mon–Sat: 10:30 AM – 8:30 PM | Sun: 11:00 AM – 6:00 PM).
   - One-click **Copy Full Address** with gold toast notifications.
 - **📞 Direct Concierge & Orders**:
   - **Primary Concierge:** `+91 8949540902` (Tap to Call / WhatsApp)
-  - **Boutique Support:** `+91 8619338794` (Tap to Call / WhatsApp)
+  - **Store Support:** `+91 8619338794` (Tap to Call / WhatsApp)
   - One-click copy phone numbers.
 - **🔐 Hidden Admin Management Console**:
   - Master password protection powered by a Vercel Serverless Function (`api/admin.js`) reading `process.env.ADMIN_PASSWORD`.
@@ -45,7 +45,7 @@ A modern, high-performance, single-page luxury jewellery web application showcas
 The admin console is concealed from ordinary customers and can be opened in 4 ways:
 1. **Keyboard Shortcut**: Press `Ctrl + Shift + A` (or `Cmd + Shift + A` on Mac).
 2. **URL Hash**: Add `#admin` to the website URL (e.g., `https://your-store.vercel.app/#admin`).
-3. **Triple-Click Logo**: Tap or click the circular boutique logo 3 times rapidly.
+3. **Triple-Click Logo**: Tap or click the circular store logo 3 times rapidly.
 4. **Footer Lock Icon**: Click the subtle **"Staff Login"** button at the bottom of the page footer.
 
 ### Configuring the Master Password in Vercel
@@ -60,7 +60,7 @@ The admin console is concealed from ordinary customers and can be opened in 4 wa
 
 ---
 
-## 🏬 Boutique Location & Hours
+## 🏬 Store Location & Hours
 
 | Attribute | Details |
 | :--- | :--- |

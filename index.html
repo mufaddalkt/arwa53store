@@ -154,11 +154,11 @@ const CATEGORY_ICON = {
 };
 
 /* ------------------------------------------------------------------ */
-/*  Store & Boutique Information — Physical Location in Banswara       */
+/*  Store & Store Information — Physical Location in Banswara       */
 /* ------------------------------------------------------------------ */
 const DEFAULT_STORE_INFO = {
   name: "Arwa 53 Collection",
-  tagline: "Exclusive Gold & Fine Imitation Jewellery Boutique",
+  tagline: "Exclusive Gold & Fine Imitation Jewellery Collection",
   address: "HC2W+PRQ, Near Mewad Hospital, Opposite Vaibhav Opticals, Najmi Bagh, Nai Abadi, Banswara, Rajasthan 327001, India",
   shortAddress: "Najmi Bagh, Nai Abadi, Banswara, Rajasthan",
   plusCode: "HC2W+PRQ, Banswara",
@@ -169,7 +169,7 @@ const DEFAULT_STORE_INFO = {
   phone2Raw: "918619338794",
   contacts: [
     { number: "+91 8949540902", label: "Primary Concierge & Orders", raw: "918949540902" },
-    { number: "+91 8619338794", label: "Boutique Support & Visit Inquiries", raw: "918619338794" },
+    { number: "+91 8619338794", label: "Store Support & Visit Inquiries", raw: "918619338794" },
   ],
   landmarks: [
     { title: "Opposite Vaibhav Opticals", subtitle: "Directly facing across the street", icon: Compass },
@@ -182,7 +182,7 @@ const DEFAULT_STORE_INFO = {
   ],
   googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=23.551843,74.447071",
   mapEmbedUrl: "https://maps.google.com/maps?q=23.551843,74.447071&hl=en&z=18&t=m&output=embed",
-  whatsappUrl: "https://wa.me/918949540902?text=Hello%20Arwa%2053%20Collection%2C%20I%20would%20like%20to%20inquire%20about%20visiting%20your%20boutique%20at%20Nai%20Abadi%2C%20Banswara.",
+  whatsappUrl: "https://wa.me/918949540902?text=Hello%20Arwa%2053%20Collection%2C%20I%20would%20like%20to%20inquire%20about%20visiting%20your%20store%20at%20Nai%20Abadi%2C%20Banswara.",
   whatsappUrl2: "https://wa.me/918619338794?text=Hello%20Arwa%2053%20Collection%2C%20I%20would%20like%20to%20inquire%20about%20your%20jewellery%20collection.",
   features: [
     "In-Store Try-on & Styling",
@@ -557,7 +557,7 @@ function ProductModal({ product, onClose, isWishlisted, onToggleWishlist, onNavi
   if (!product) return null;
 
   const whatsappInquiryUrl = `https://wa.me/${STORE_INFO.phone1Raw}?text=${encodeURIComponent(
-    `Hello Arwa 53 Collection, I am interested in "${product.name}" (${formatINR(product.price)}). Is this available for in-store try-on at your boutique near Mewad Hospital, Nai Abadi, Banswara?`
+    `Hello Arwa 53 Collection, I am interested in "${product.name}" (${formatINR(product.price)}). Is this available for in-store try-on at your store near Mewad Hospital, Nai Abadi, Banswara?`
   )}`;
 
   return (
@@ -603,7 +603,7 @@ function ProductModal({ product, onClose, isWishlisted, onToggleWishlist, onNavi
             <div className="flex-1">
               <p className="text-xs font-bold" style={{ color: C.ink }}>Available for In-Store Preview</p>
               <p className="text-[11px] leading-snug mt-0.5" style={{ color: C.inkSoft }}>
-                Try this piece at our boutique: <span className="font-semibold text-stone-800">Near Mewad Hospital, opp. Vaibhav Opticals, Nai Abadi, Banswara</span>.
+                Try this piece at our jewellery store: <span className="font-semibold text-stone-800">Near Mewad Hospital, opp. Vaibhav Opticals, Nai Abadi, Banswara</span>.
               </p>
               <p className="text-[10.5px] mt-1 font-medium text-stone-600">
                 Call / WhatsApp: <a href={`tel:${STORE_INFO.phone1}`} className="underline font-bold">{STORE_INFO.phone1}</a> • <a href={`tel:${STORE_INFO.phone2}`} className="underline font-bold">{STORE_INFO.phone2}</a>
@@ -778,7 +778,7 @@ function WishlistModal({ isOpen, onClose, wishlist, onToggleWishlist, onSelectPr
               style={{ background: '#fff', border: `1px solid ${C.blush}`, color: C.ink }}
             >
               <MapPin size={14} style={{ color: C.goldDark }} />
-              <span>Try In-Store (Banswara Boutique)</span>
+              <span>Try In-Store (Banswara Store)</span>
             </button>
           </div>
         )}
@@ -788,9 +788,9 @@ function WishlistModal({ isOpen, onClose, wishlist, onToggleWishlist, onSelectPr
 }
 
 /* ------------------------------------------------------------------ */
-/*  Boutique Location Section — Detailed physical store showcase       */
+/*  Store Location Section — Detailed physical store showcase       */
 /* ------------------------------------------------------------------ */
-function BoutiqueSection({ onCopyAddress, onCopyPhone }) {
+function StoreSection({ onCopyAddress, onCopyPhone }) {
   return (
     <section id="store-location" className="max-w-5xl mx-auto px-5 py-12">
       {/* Section Header */}
@@ -800,7 +800,7 @@ function BoutiqueSection({ onCopyAddress, onCopyPhone }) {
           style={{ background: `${C.gold}22`, color: C.goldDark, border: `1px solid ${C.gold}44` }}
         >
           <MapPin size={12} />
-          <span>Physical Boutique & Store</span>
+          <span>Physical Jewellery Store</span>
         </div>
         <ShimmerText size="2.2rem" as="h2">Visit Our Store in Banswara</ShimmerText>
         <p className="text-sm mt-2 max-w-lg mx-auto" style={{ color: C.inkSoft }}>
@@ -969,7 +969,7 @@ function BoutiqueSection({ onCopyAddress, onCopyPhone }) {
                     <span>Call</span>
                   </a>
                   <a
-                    href={`https://wa.me/${STORE_INFO.phone2Raw}?text=Hello%20Arwa%2053%20Collection%2C%20I%20would%20like%20to%20know%20more%20about%20visiting%20your%20boutique.`}
+                    href={`https://wa.me/${STORE_INFO.phone2Raw}?text=Hello%20Arwa%2053%20Collection%2C%20I%20would%20like%20to%20know%20more%20about%20visiting%20your%20jewellery%20store.`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex-1 py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-transform active:scale-95 text-white"
@@ -1005,7 +1005,7 @@ function BoutiqueSection({ onCopyAddress, onCopyPhone }) {
             })}
           </div>
 
-          {/* Boutique Features Strip */}
+          {/* Store Features Strip */}
           <div
             className="p-4 rounded-2xl flex flex-wrap items-center justify-between gap-3 text-xs"
             style={{ background: `${C.peach}66`, border: `1px solid rgba(201,162,39,0.2)` }}
@@ -1494,7 +1494,7 @@ function AdminModal({
                   Owner Authentication
                 </h4>
                 <p className="text-xs mt-1.5" style={{ color: C.inkSoft }}>
-                  Enter the secure administrator password to edit jewellery items, prices, and boutique details.
+                  Enter the secure administrator password to edit jewellery items, prices, and store details.
                 </p>
               </div>
 
@@ -1959,7 +1959,7 @@ function AdminModal({
                       <GoldButton type="submit">
                         <span className="flex items-center gap-1.5 text-xs font-bold">
                           <Save size={14} />
-                          <span>Save Boutique Settings</span>
+                          <span>Save Store Settings</span>
                         </span>
                       </GoldButton>
                     </div>
@@ -2317,7 +2317,7 @@ function App() {
             <span>{visitorCount ? visitorCount.toLocaleString() : '1,285'} Visits</span>
           </div>
 
-          {/* Location Badge (Click to scroll to boutique section) */}
+          {/* Location Badge (Click to scroll to store location) */}
           <button
             onClick={scrollToLocation}
             className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-all hover:shadow-sm active:scale-95"
@@ -2420,7 +2420,7 @@ function App() {
 
           <div className={`hero-in hero-delay-2 ${heroMounted ? 'show' : ''}`}>
             <p className="text-sm mt-2 max-w-md mx-auto" style={{ color: C.inkSoft }}>
-              Handpicked gold bangles & jewellery from the Arwa 53 Collection. Visit our boutique in Banswara or explore online.
+              Handpicked gold bangles & jewellery from the Arwa 53 Collection. Visit our jewellery store in Banswara or explore online.
             </p>
 
             {/* Quick Hero Location & Contact Indicator */}
@@ -2431,7 +2431,7 @@ function App() {
                 style={{ background: `${C.cream}`, border: `1px solid ${C.gold}`, color: C.ink }}
               >
                 <MapPin size={12} style={{ color: C.goldDark }} />
-                <span>Boutique: Near Mewad Hospital, Nai Abadi, Banswara</span>
+                <span>Store: Near Mewad Hospital, Nai Abadi, Banswara</span>
               </button>
 
               <a
@@ -2605,8 +2605,8 @@ function App() {
         )}
       </main>
 
-      {/* Boutique Location Section */}
-      <BoutiqueSection onCopyAddress={handleCopyAddress} onCopyPhone={handleCopyPhones} />
+      {/* Store Location Section */}
+      <StoreSection onCopyAddress={handleCopyAddress} onCopyPhone={handleCopyPhones} />
 
       {/* footer */}
       <footer className="px-5 py-12 text-center relative" style={{ background: C.ink, color: C.cream }}>
@@ -2710,7 +2710,7 @@ function App() {
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
             <Users size={13} style={{ color: C.goldLight }} />
             <span className="text-xs font-semibold text-amber-100/90">
-              Live Boutique Visitors: <span style={{ color: C.goldLight }} className="font-extrabold">{visitorCount ? visitorCount.toLocaleString() : '1,285'}</span>
+              Live Store Visitors: <span style={{ color: C.goldLight }} className="font-extrabold">{visitorCount ? visitorCount.toLocaleString() : '1,285'}</span>
             </span>
           </div>
 
