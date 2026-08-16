@@ -2490,6 +2490,26 @@ function App() {
     return () => clearInterval(timer);
   }, [spotlightItems.length]);
 
+  const HERO_VIDEOS = ['video1.mp4', 'video2.mp4'];
+  const [videoIndex, setVideoIndex] = useState(0);
+  const videoRef = useRef(null);
+
+  function prevVideo() {
+    setVideoIndex((prev) => (prev - 1 + HERO_VIDEOS.length) % HERO_VIDEOS.length);
+  }
+
+  function nextVideo() {
+    setVideoIndex((prev) => (prev + 1) % HERO_VIDEOS.length);
+  }
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.load();
+      videoRef.current.play().catch(() => {});
+    }
+  }, [videoIndex]);
+
+
   return (
     <div
       className="min-h-screen w-full"
@@ -2695,6 +2715,81 @@ function App() {
             <p className="text-sm mt-2 max-w-md mx-auto" style={{ color: C.inkSoft }}>
               Handpicked gold bangles & jewellery from the Arwa 53 Collection. Visit our jewellery store in Banswara or explore online.
             </p>
+          </div>
+
+          {/* ── Video Showcase inside Hero ── */}
+          <div className={`hero-in hero-delay-3 ${heroMounted ? 'show' : ''} mt-6 max-w-sm sm:max-w-md mx-auto`}>
+            <div
+              className="relative rounded-3xl overflow-hidden shadow-2xl"
+              style={{
+                border: `2px solid ${C.gold}`,
+                boxShadow: '0 20px 44px -14px rgba(201,162,39,0.5)',
+                background: '#000',
+              }}
+            >
+              {/* Video Player */}
+              <video
+                ref={videoRef}
+                key={HERO_VIDEOS[videoIndex]}
+                src={HERO_VIDEOS[videoIndex]}
+                className="w-full block"
+                style={{ maxHeight: '340px', objectFit: 'cover' }}
+                autoPlay
+                muted
+                loop
+                playsInline
+              />
+
+              {/* Gold overlay badge */}
+              <div
+                className="absolute top-3 left-3 px-3 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-wider text-white"
+                style={{ background: `linear-gradient(135deg, ${C.goldLight}, ${C.goldDark})`, boxShadow: '0 2px 8px rgba(0,0,0,0.25)' }}
+              >
+                ✨ Arwa 53 Collection
+              </div>
+
+              {/* Left Arrow */}
+              <button
+                onClick={prevVideo}
+                className="absolute left-2.5 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full flex items-center justify-center shadow-lg transition-all duration-200 hover:scale-110 active:scale-90"
+                style={{ background: 'rgba(255,255,255,0.9)', border: `1.5px solid ${C.gold}`, backdropFilter: 'blur(6px)' }}
+                title="Previous video"
+              >
+                <ChevronLeft size={20} style={{ color: C.ink }} />
+              </button>
+
+              {/* Right Arrow */}
+              <button
+                onClick={nextVideo}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full flex items-center justify-center shadow-lg transition-all duration-200 hover:scale-110 active:scale-90"
+                style={{ background: 'rgba(255,255,255,0.9)', border: `1.5px solid ${C.gold}`, backdropFilter: 'blur(6px)' }}
+                title="Next video"
+              >
+                <ChevronRight size={20} style={{ color: C.ink }} />
+              </button>
+
+              {/* Dot indicators */}
+              <div className="absolute bottom-3 left-0 right-0 flex items-center justify-center gap-2">
+                {HERO_VIDEOS.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setVideoIndex(i)}
+                    className="transition-all duration-300 rounded-full"
+                    style={{
+                      width: i === videoIndex ? '20px' : '7px',
+                      height: '7px',
+                      background: i === videoIndex ? C.gold : 'rgba(255,255,255,0.7)',
+                      boxShadow: i === videoIndex ? '0 0 8px rgba(201,162,39,0.8)' : 'none',
+                    }}
+                    aria-label={`Video ${i + 1}`}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Caption below video */}
+            <p className="text-center text-xs mt-2.5 font-medium" style={{ color: C.inkFaint }}
+            >Tap arrows to switch · Videos play automatically</p>
           </div>
         </section>
       )}
