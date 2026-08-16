@@ -1012,18 +1012,6 @@ function StoreSection({ onCopyAddress, onCopyPhone }) {
             </div>
           </div>
 
-          {/* Store Features Strip */}
-          <div
-            className="p-4 rounded-2xl flex flex-wrap items-center justify-between gap-3 text-xs"
-            style={{ background: `${C.peach}66`, border: `1px solid rgba(201,162,39,0.2)` }}
-          >
-            {STORE_INFO.features.map((feat, i) => (
-              <div key={i} className="flex items-center gap-1.5 font-semibold" style={{ color: C.ink }}>
-                <ShieldCheck size={14} style={{ color: C.goldDark }} />
-                <span>{feat}</span>
-              </div>
-            ))}
-          </div>
         </div>
 
         {/* Right Column: Visual Map Simulation & Timings Card (5 cols) */}
@@ -1116,7 +1104,7 @@ function StoreSection({ onCopyAddress, onCopyPhone }) {
             <div className="flex items-center gap-2 mb-3">
               <Clock size={16} style={{ color: C.goldDark }} />
               <h4 className="text-xs font-extrabold uppercase tracking-wider" style={{ color: C.ink }}>
-                Visiting Hours & Timings
+                Store Hours & Timings
               </h4>
             </div>
 
