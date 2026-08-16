@@ -2059,9 +2059,10 @@ function App() {
 
   const marqueeItems = useMemo(() => {
     const picks = products.filter((p) => p.badge === 'Bestseller');
-    const pool = picks.length >= 4 ? picks : products;
-    const base = pool.slice(0, 5);
-    return [...base, ...base];
+    const pool = (picks.length >= 4 ? picks : products).slice(0, 5);
+    // Seamless repeating sequence of the 5 pieces across full screen
+    const segment = [...pool, ...pool, ...pool, ...pool];
+    return [...segment, ...segment];
   }, [products]);
 
   return (
@@ -2105,7 +2106,7 @@ function App() {
         .hero-delay-3 { transition-delay: .28s; }
 
         /* bestseller marquee */
-        .marquee-track { display: flex; gap: 14px; width: max-content; animation: marqueeScroll 16s linear infinite; }
+        .marquee-track { display: flex; gap: 16px; width: max-content; animation: marqueeScroll 28s linear infinite; }
         .marquee-track:hover { animation-play-state: paused; }
         @keyframes marqueeScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
@@ -2292,14 +2293,25 @@ function App() {
 
       {/* bestseller marquee */}
       {!searchOpen && marqueeItems.length > 0 && (
-        <div className={`hero-in hero-delay-3 ${heroMounted ? 'show' : ''} overflow-hidden mb-2`} style={{ maskImage: 'linear-gradient(90deg, transparent, black 8%, black 92%, transparent)', WebkitMaskImage: 'linear-gradient(90deg, transparent, black 8%, black 92%, transparent)' }}>
-          <div className="marquee-track py-1 px-5">
+        <div
+          className={`hero-in hero-delay-3 ${heroMounted ? 'show' : ''} w-full overflow-hidden my-3`}
+          style={{
+            maskImage: 'linear-gradient(90deg, transparent 0%, black 10%, black 90%, transparent 100%)',
+            WebkitMaskImage: 'linear-gradient(90deg, transparent 0%, black 10%, black 90%, transparent 100%)',
+          }}
+        >
+          <div className="marquee-track py-2">
             {marqueeItems.map((product, i) => (
               <button
                 key={product.id + '-' + i}
                 onClick={() => setSelected(product)}
-                className="flex-shrink-0 w-16 h-16 rounded-2xl overflow-hidden"
-                style={{ border: `1.5px solid ${C.gold}`, boxShadow: '0 4px 14px -6px rgba(201,162,39,0.5)' }}
+                className="flex-shrink-0 group relative w-20 h-20 sm:w-24 sm:h-24 rounded-2xl overflow-hidden transition-all duration-300 hover:scale-105"
+                style={{
+                  border: `1.5px solid ${C.gold}`,
+                  background: '#FFFFFF',
+                  boxShadow: '0 6px 16px -6px rgba(201,162,39,0.5)',
+                }}
+                title={`${product.name} - ${formatINR(product.price)}`}
               >
                 <ProductVisual product={product} />
               </button>
