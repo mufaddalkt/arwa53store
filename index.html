@@ -2468,10 +2468,9 @@ function App() {
   }
 
   const marqueeItems = useMemo(() => {
-    const picks = products.filter((p) => p.badge === 'Bestseller' || p.badge === 'Signature' || p.badge === 'New Arrival');
-    const pool = (picks.length >= 6 ? picks : products).slice(0, 6);
-    // Duplicate 6 items once for seamless continuous 50% right-to-left loop
-    return [...pool, ...pool];
+    // Strictly exactly 5 curated pieces in the moving line
+    const picks = products.filter((p) => p.badge === 'Bestseller' || p.badge === 'Signature');
+    return (picks.length >= 5 ? picks : products).slice(0, 5);
   }, [products]);
 
   return (
@@ -2514,10 +2513,13 @@ function App() {
         .hero-delay-2 { transition-delay: .18s; }
         .hero-delay-3 { transition-delay: .28s; }
 
-        /* bestseller marquee */
-        .marquee-track { display: flex; gap: 36px; width: max-content; animation: marqueeScroll 22s linear infinite; }
+        /* bestseller marquee: exactly 5 images moving right-to-left */
+        .marquee-track { display: flex; gap: 40px; width: max-content; animation: marqueeScroll 18s linear infinite; }
         .marquee-track:hover { animation-play-state: paused; }
-        @keyframes marqueeScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+        @keyframes marqueeScroll {
+          0% { transform: translateX(100vw); }
+          100% { transform: translateX(calc(-100% - 20px)); }
+        }
 
         /* tilt cards + shine sweep */
         .tilt-card { will-change: transform; }
