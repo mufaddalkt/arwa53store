@@ -1055,6 +1055,9 @@ function App() {
   const [heroMounted, setHeroMounted] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
   const [toastShow, setToastShow] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const PRODUCTS_PER_PAGE = 8;
 
   useEffect(() => {
     setWishlist(loadWishlist());
@@ -1064,6 +1067,10 @@ function App() {
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => { clearTimeout(t); window.removeEventListener('scroll', onScroll); };
   }, []);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [category, search]);
 
   function triggerToast(msg) {
     setToastMessage(msg);
@@ -1114,6 +1121,22 @@ function App() {
       return matchCat && matchSearch;
     });
   }, [category, search]);
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PRODUCTS_PER_PAGE));
+
+  const paginatedProducts = useMemo(() => {
+    const start = (currentPage - 1) * PRODUCTS_PER_PAGE;
+    return filtered.slice(start, start + PRODUCTS_PER_PAGE);
+  }, [filtered, currentPage]);
+
+  function handlePageChange(newPage) {
+    if (newPage < 1 || newPage > totalPages) return;
+    setCurrentPage(newPage);
+    const el = document.getElementById('catalog-section');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
 
   const marqueeItems = useMemo(() => {
     const picks = PRODUCTS.filter((p) => p.badge === 'Bestseller');
@@ -1365,7 +1388,7 @@ function App() {
         </div>
       )}
 
-      <main className="max-w-5xl mx-auto px-5 pb-8">
+      <main id="catalog-section" className="max-w-5xl mx-auto px-5 pb-8 scroll-mt-20">
         {/* category chips */}
         <div className="flex items-center justify-between mb-5 flex-wrap gap-2">
           <div className="flex gap-2 overflow-x-auto no-scrollbar">
@@ -1401,17 +1424,86 @@ function App() {
             <p className="text-sm" style={{ color: C.inkFaint }}>No pieces match "{search}".</p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3.5">
-            {filtered.map((product, i) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                index={i % 12}
-                onOpen={setSelected}
-                isWishlisted={wishlist.includes(product.id)}
-                onToggleWishlist={toggleWishlist}
-              />
-            ))}
+          <div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3.5">
+              {paginatedProducts.map((product, i) => (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  index={i % 8}
+                  onOpen={setSelected}
+                  isWishlisted={wishlist.includes(product.id)}
+                  onToggleWishlist={toggleWishlist}
+                />
+              ))}
+            </div>
+
+            {/* Pagination Controls */}
+            {totalPages > 1 && (
+              <div
+                className="mt-8 pt-5 flex flex-col sm:flex-row items-center justify-between gap-4"
+                style={{ borderTop: `1px solid rgba(201,162,39,0.2)` }}
+              >
+                <p className="text-xs font-semibold" style={{ color: C.inkSoft }}>
+                  Showing <span className="font-bold text-stone-900">{(currentPage - 1) * PRODUCTS_PER_PAGE + 1}–{Math.min(currentPage * PRODUCTS_PER_PAGE, filtered.length)}</span> of <span className="font-bold text-stone-900">{filtered.length}</span> pieces
+                </p>
+
+                <div className="flex items-center gap-1.5">
+                  {/* Prev Button */}
+                  <button
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className="px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1 transition-all disabled:opacity-40 disabled:cursor-not-allowed hover:bg-black/5 active:scale-95"
+                    style={{
+                      background: currentPage === 1 ? 'transparent' : '#FFFFFF',
+                      border: `1px solid ${C.blush}`,
+                      color: C.ink,
+                    }}
+                    aria-label="Previous Page"
+                  >
+                    <ChevronLeft size={14} />
+                    <span>Prev</span>
+                  </button>
+
+                  {/* Page Numbers */}
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
+                    <button
+                      key={pageNum}
+                      onClick={() => handlePageChange(pageNum)}
+                      className="w-9 h-9 rounded-xl text-xs font-extrabold transition-all active:scale-95 flex items-center justify-center"
+                      style={{
+                        background: currentPage === pageNum
+                          ? `linear-gradient(135deg, ${C.goldLight}, ${C.gold} 70%, ${C.goldDark})`
+                          : '#FFFFFF',
+                        color: currentPage === pageNum ? '#FFFFFF' : C.ink,
+                        border: currentPage === pageNum ? 'none' : `1px solid ${C.blush}`,
+                        boxShadow: currentPage === pageNum ? '0 4px 12px -3px rgba(201,162,39,0.5)' : 'none',
+                      }}
+                      aria-label={`Page ${pageNum}`}
+                      aria-current={currentPage === pageNum ? 'page' : undefined}
+                    >
+                      {pageNum}
+                    </button>
+                  ))}
+
+                  {/* Next Button */}
+                  <button
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                    className="px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1 transition-all disabled:opacity-40 disabled:cursor-not-allowed hover:bg-black/5 active:scale-95"
+                    style={{
+                      background: currentPage === totalPages ? 'transparent' : '#FFFFFF',
+                      border: `1px solid ${C.blush}`,
+                      color: C.ink,
+                    }}
+                    aria-label="Next Page"
+                  >
+                    <span>Next</span>
+                    <ChevronRight size={14} />
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </main>
