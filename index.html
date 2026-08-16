@@ -2059,7 +2059,8 @@ function App() {
 
   const marqueeItems = useMemo(() => {
     const picks = products.filter((p) => p.badge === 'Bestseller');
-    const base = picks.length >= 6 ? picks : products.slice(0, 10);
+    const pool = picks.length >= 4 ? picks : products;
+    const base = pool.slice(0, 5);
     return [...base, ...base];
   }, [products]);
 
@@ -2104,7 +2105,7 @@ function App() {
         .hero-delay-3 { transition-delay: .28s; }
 
         /* bestseller marquee */
-        .marquee-track { display: flex; gap: 14px; width: max-content; animation: marqueeScroll 26s linear infinite; }
+        .marquee-track { display: flex; gap: 14px; width: max-content; animation: marqueeScroll 16s linear infinite; }
         .marquee-track:hover { animation-play-state: paused; }
         @keyframes marqueeScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
