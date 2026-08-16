@@ -3232,7 +3232,61 @@ function App() {
             </span>
           </div>
 
-          <div className="flex items-center justify-center gap-2 text-[10px]" style={{ color: 'rgba(232,196,104,0.4)' }}>
+          {/* Creator & Custom Website Inquiry Badge */}
+          <div
+            className="mt-6 p-4 sm:p-5 rounded-3xl max-w-xl mx-auto text-center relative overflow-hidden transition-all duration-300"
+            style={{
+              background: 'linear-gradient(135deg, rgba(232,196,104,0.12), rgba(201,162,39,0.05))',
+              border: '1px solid rgba(232,196,104,0.3)',
+              boxShadow: '0 8px 24px -8px rgba(0,0,0,0.3)',
+            }}
+          >
+            <div className="flex items-center justify-center gap-2 mb-1.5">
+              <Sparkles size={15} style={{ color: C.goldLight }} />
+              <p className="text-xs sm:text-sm font-extrabold text-amber-200" style={{ fontFamily: "'Playfair Display', serif" }}>
+                Loved this website? Want a website of your own?
+              </p>
+            </div>
+
+            <p className="text-[11.5px] text-stone-300 mb-3">
+              Crafted with luxury design & high-speed performance • Contact <span className="text-amber-300 font-bold">Mufaddal KT</span>
+            </p>
+
+            <div className="flex items-center justify-center gap-2.5 flex-wrap">
+              {/* WhatsApp Contact */}
+              <a
+                href="https://wa.me/918619338794?text=Hello%20Mufaddal%2C%20I%20saw%20the%20Arwa%2053%20Collection%20website%20and%20loved%20it!%20I%20would%20like%20to%20inquire%20about%20building%20a%20website%20for%20my%20business."
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold text-white transition-transform active:scale-95 shadow-sm"
+                style={{
+                  background: '#25D366',
+                  boxShadow: '0 2px 10px -2px rgba(37,211,102,0.5)',
+                }}
+                title="Chat with Mufaddal KT on WhatsApp"
+              >
+                <MessageCircle size={13} />
+                <span>WhatsApp: +91 8619338794</span>
+              </a>
+
+              {/* Direct Call */}
+              <a
+                href="tel:+918619338794"
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold transition-transform active:scale-95"
+                style={{
+                  background: `linear-gradient(135deg, ${C.goldLight}, ${C.gold} 70%, ${C.goldDark})`,
+                  color: '#FFFFFF',
+                  boxShadow: '0 2px 10px -2px rgba(201,162,39,0.4)',
+                }}
+                title="Call Mufaddal KT at +91 8619338794"
+              >
+                <Phone size={12} />
+                <span>Call Mufaddal KT</span>
+              </a>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-center gap-2 text-[10px] pt-2" style={{ color: 'rgba(232,196,104,0.4)' }}>
             <span>© {new Date().getFullYear()} Arwa 53 Collection • All rights reserved.</span>
             <span>•</span>
             <button
