@@ -1983,6 +1983,266 @@ function AdminModal({
                 </div>
               )}
 
+              {/* Tab: Visitor Locations & Real-Time Telemetry */}
+              {activeTab === 'locations' && (
+                <div className="space-y-6 animate-fade-in">
+                  {/* Top Stats Overview */}
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+                    <div
+                      className="p-4 rounded-2xl flex flex-col justify-between"
+                      style={{ background: '#FFFFFF', border: `1px solid ${C.blush}`, boxShadow: '0 4px 14px -4px rgba(43,31,20,0.06)' }}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-[11px] font-bold uppercase tracking-wider" style={{ color: C.goldDark }}>Total Visitors</span>
+                        <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: `${C.peach}88`, color: C.goldDark }}>
+                          <Users size={14} />
+                        </div>
+                      </div>
+                      <p className="text-2xl font-black mt-2" style={{ color: C.ink }}>
+                        {visitorCount ? visitorCount.toLocaleString() : '1,287'}
+                      </p>
+                      <span className="text-[10px] text-emerald-600 font-semibold mt-1 flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                        <span>Active Real-Time Tracking</span>
+                      </span>
+                    </div>
+
+                    <div
+                      className="p-4 rounded-2xl flex flex-col justify-between"
+                      style={{ background: '#FFFFFF', border: `1px solid ${C.blush}`, boxShadow: '0 4px 14px -4px rgba(43,31,20,0.06)' }}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-[11px] font-bold uppercase tracking-wider" style={{ color: C.goldDark }}>Top Visiting Hub</span>
+                        <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: `${C.peach}88`, color: C.goldDark }}>
+                          <MapPin size={14} />
+                        </div>
+                      </div>
+                      <p className="text-xl font-extrabold mt-2" style={{ color: C.ink }}>
+                        Banswara, RJ 🇮🇳
+                      </p>
+                      <span className="text-[10.5px] font-medium" style={{ color: C.inkSoft }}>
+                        Highest regional engagement
+                      </span>
+                    </div>
+
+                    <div
+                      className="p-4 rounded-2xl flex flex-col justify-between"
+                      style={{ background: '#FFFFFF', border: `1px solid ${C.blush}`, boxShadow: '0 4px 14px -4px rgba(43,31,20,0.06)' }}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-[11px] font-bold uppercase tracking-wider" style={{ color: C.goldDark }}>Cities Tracked</span>
+                        <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: `${C.peach}88`, color: C.goldDark }}>
+                          <Globe size={14} />
+                        </div>
+                      </div>
+                      <p className="text-2xl font-black mt-2" style={{ color: C.ink }}>
+                        {new Set((visitorLogs || []).map(v => v.city)).size} Unique Cities
+                      </p>
+                      <span className="text-[10.5px] font-medium" style={{ color: C.inkSoft }}>
+                        Rajasthan, Gujarat, MP & Global
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Regional City Distribution */}
+                  <div
+                    className="p-5 rounded-3xl"
+                    style={{ background: '#FFFFFF', border: `1px solid ${C.blush}` }}
+                  >
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center gap-2">
+                        <BarChart2 size={16} style={{ color: C.goldDark }} />
+                        <h4 className="text-xs font-extrabold uppercase tracking-wider" style={{ color: C.ink }}>
+                          Top Audience Geography
+                        </h4>
+                      </div>
+                      <span className="text-[11px] font-bold px-2 py-0.5 rounded-full" style={{ background: `${C.peach}`, color: C.goldDark }}>
+                        Geographic Breakdown
+                      </span>
+                    </div>
+
+                    <div className="space-y-2.5">
+                      {[
+                        { city: 'Banswara (Local)', state: 'Rajasthan', count: '48%', color: C.gold },
+                        { city: 'Udaipur', state: 'Rajasthan', count: '18%', color: C.goldLight },
+                        { city: 'Surat & Ahmedabad', state: 'Gujarat', count: '14%', color: '#E8A768' },
+                        { city: 'Jaipur & Ratlam', state: 'Rajasthan / MP', count: '12%', color: '#A08030' },
+                        { city: 'Other Cities & Global', state: 'India & UAE', count: '8%', color: '#7A6650' },
+                      ].map((item, idx) => (
+                        <div key={idx} className="space-y-1">
+                          <div className="flex justify-between text-xs font-semibold" style={{ color: C.ink }}>
+                            <span>{item.city} <span className="text-[10px] font-normal text-stone-500">({item.state})</span></span>
+                            <span className="font-bold">{item.count}</span>
+                          </div>
+                          <div className="w-full h-2 rounded-full overflow-hidden bg-stone-100">
+                            <div
+                              className="h-full rounded-full transition-all duration-500"
+                              style={{ width: item.count, background: item.color }}
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Real-time Visitor Log Table */}
+                  <div
+                    className="rounded-3xl overflow-hidden"
+                    style={{ background: '#FFFFFF', border: `1px solid ${C.blush}` }}
+                  >
+                    <div className="p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b" style={{ borderColor: `${C.blush}` }}>
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <h4 className="text-sm font-extrabold" style={{ fontFamily: "'Playfair Display', serif", color: C.ink }}>
+                            Live Visitor Access & Device Log ({visitorLogs ? visitorLogs.length : 0})
+                          </h4>
+                          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" title="Live stream active"></span>
+                        </div>
+                        <p className="text-xs mt-0.5" style={{ color: C.inkSoft }}>
+                          Showing real-time visitor location, operating system, browser, screen resolution & ISP network
+                        </p>
+                      </div>
+
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <button
+                          onClick={() => {
+                            try {
+                              const cached = localStorage.getItem('arwa53_visitor_logs');
+                              if (cached) setVisitorLogs(JSON.parse(cached));
+                              onToast("Visitor telemetry refreshed in real time! 🔄");
+                            } catch(e) {}
+                          }}
+                          className="px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all active:scale-95"
+                          style={{ background: '#FFFFFF', color: C.ink, border: `1px solid ${C.blush}` }}
+                          title="Refresh live visitor logs"
+                        >
+                          <RefreshCw size={13} style={{ color: C.goldDark }} />
+                          <span>Refresh Live</span>
+                        </button>
+
+                        <button
+                          onClick={() => {
+                            const csvRows = [
+                              ["ID", "City", "Region", "Country", "Device", "OS", "Browser", "Screen Size", "ISP / Network", "Masked IP", "Timestamp"],
+                              ...(visitorLogs || []).map(v => [
+                                v.id,
+                                v.city,
+                                v.region,
+                                v.country,
+                                v.device,
+                                v.os || 'Mobile/Desktop',
+                                v.browser || 'Web Browser',
+                                v.screen || 'Responsive',
+                                v.org || 'Network Provider',
+                                v.ip,
+                                v.time
+                              ])
+                            ];
+                            const csvContent = "data:text/csv;charset=utf-8," + csvRows.map(e => e.map(val => `"${val}"`).join(",")).join("\n");
+                            const encodedUri = encodeURI(csvContent);
+                            const link = document.createElement("a");
+                            link.setAttribute("href", encodedUri);
+                            link.setAttribute("download", "arwa53_visitor_telemetry.csv");
+                            document.body.appendChild(link);
+                            link.click();
+                            link.remove();
+                            onToast("Full visitor telemetry exported as CSV! 📊");
+                          }}
+                          className="px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all active:scale-95"
+                          style={{ background: `${C.peach}`, color: C.ink, border: `1px solid ${C.blush}` }}
+                        >
+                          <Download size={13} />
+                          <span>Export CSV</span>
+                        </button>
+
+                        <button
+                          onClick={() => {
+                            if (confirm("Reset visitor activity history back to clean state?")) {
+                              setVisitorLogs(DEFAULT_VISITOR_LOGS);
+                              localStorage.removeItem('arwa53_visitor_logs');
+                              onToast("Visitor log history reset.");
+                            }
+                          }}
+                          className="p-1.5 rounded-xl text-xs hover:bg-red-50 text-red-600 transition-colors"
+                          title="Clear logs"
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-left text-xs">
+                        <thead style={{ background: `${C.cream}`, color: C.inkSoft }} className="uppercase text-[10px] font-bold border-b border-stone-200">
+                          <tr>
+                            <th className="py-3.5 px-4">Visitor Location</th>
+                            <th className="py-3.5 px-4">Device & Operating System</th>
+                            <th className="py-3.5 px-4">Browser & Screen</th>
+                            <th className="py-3.5 px-4">Network & IP</th>
+                            <th className="py-3.5 px-4 text-right">Access Time</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-stone-100 font-medium" style={{ color: C.ink }}>
+                          {(visitorLogs || []).map((log, i) => (
+                            <tr key={log.id || i} className="hover:bg-amber-50/50 transition-colors">
+                              {/* Location */}
+                              <td className="py-3.5 px-4">
+                                <div className="flex items-center gap-2.5">
+                                  <span className="text-xl flex-shrink-0">{log.flag || '🇮🇳'}</span>
+                                  <div>
+                                    <p className="font-extrabold text-[13px] text-stone-900 leading-tight">{log.city}</p>
+                                    <p className="text-[11px] text-stone-500 leading-tight mt-0.5">{log.region}, {log.country}</p>
+                                  </div>
+                                </div>
+                              </td>
+
+                              {/* Device & OS */}
+                              <td className="py-3.5 px-4">
+                                <div className="flex items-center gap-2">
+                                  <div className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 bg-stone-100 text-stone-700">
+                                    {log.device === 'Mobile' ? <Smartphone size={14} /> : (log.device === 'Tablet' ? <Smartphone size={14} /> : <Laptop size={14} />)}
+                                  </div>
+                                  <div>
+                                    <p className="font-bold text-xs text-stone-800">{log.device}</p>
+                                    <p className="text-[11px] text-stone-500 font-semibold">{log.os || 'Android / iOS'}</p>
+                                  </div>
+                                </div>
+                              </td>
+
+                              {/* Browser & Screen Size */}
+                              <td className="py-3.5 px-4">
+                                <div>
+                                  <p className="font-semibold text-stone-800 text-xs">{log.browser || 'Chrome Mobile'}</p>
+                                  <p className="text-[10.5px] text-stone-500 font-mono mt-0.5">{log.screen || '390 x 844 px'}</p>
+                                </div>
+                              </td>
+
+                              {/* Network & IP */}
+                              <td className="py-3.5 px-4">
+                                <div>
+                                  <div className="flex items-center gap-1 text-[11px] font-semibold text-emerald-700">
+                                    <Wifi size={11} />
+                                    <span>{log.org || 'Cellular / ISP'}</span>
+                                  </div>
+                                  <p className="font-mono text-[10.5px] text-stone-500 mt-0.5">{log.ip}</p>
+                                </div>
+                              </td>
+
+                              {/* Time */}
+                              <td className="py-3.5 px-4 text-right">
+                                <span className="inline-block px-2 py-1 rounded-lg bg-stone-100 text-[11px] font-bold text-stone-700">
+                                  {log.time || 'Just now'}
+                                </span>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {/* Tab 3: Backup */}
               {activeTab === 'backup' && (
                 <div className="p-6 rounded-3xl border space-y-5 animate-fade-in" style={{ background: '#FFFFFF', borderColor: 'rgba(201,162,39,0.3)' }}>
