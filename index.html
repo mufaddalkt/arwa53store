@@ -2467,11 +2467,28 @@ function App() {
     }
   }
 
-  const marqueeItems = useMemo(() => {
-    // Strictly exactly 5 curated pieces in the moving line
-    const picks = products.filter((p) => p.badge === 'Bestseller' || p.badge === 'Signature');
-    return (picks.length >= 5 ? picks : products).slice(0, 5);
+  const spotlightItems = useMemo(() => {
+    const picks = products.filter((p) => p.badge === 'Bestseller' || p.badge === 'Signature' || p.badge === 'New Arrival');
+    return (picks.length >= 6 ? picks : products).slice(0, 6);
   }, [products]);
+
+  const [slideIndex, setSlideIndex] = useState(0);
+
+  function nextSlide() {
+    setSlideIndex((prev) => (prev + 1) % (spotlightItems.length || 1));
+  }
+
+  function prevSlide() {
+    setSlideIndex((prev) => (prev - 1 + (spotlightItems.length || 1)) % (spotlightItems.length || 1));
+  }
+
+  useEffect(() => {
+    if (!spotlightItems.length) return;
+    const timer = setInterval(() => {
+      setSlideIndex((prev) => (prev + 1) % spotlightItems.length);
+    }, 4500);
+    return () => clearInterval(timer);
+  }, [spotlightItems.length]);
 
   return (
     <div
@@ -2682,31 +2699,169 @@ function App() {
         </section>
       )}
 
-      {/* bestseller marquee */}
-      {!searchOpen && marqueeItems.length > 0 && (
-        <div
-          className={`hero-in hero-delay-3 ${heroMounted ? 'show' : ''} w-full overflow-hidden my-4 sm:my-6`}
-          style={{
-            maskImage: 'linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%)',
-            WebkitMaskImage: 'linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%)',
-          }}
-        >
-          <div className="marquee-track py-3">
-            {marqueeItems.map((product, i) => (
+      {/* Hero Spotlight Carousel (Center of Hero Section as requested) */}
+      {!searchOpen && spotlightItems.length > 0 && (
+        <div className={`hero-in hero-delay-3 ${heroMounted ? 'show' : ''} px-4 max-w-xl mx-auto my-4 sm:my-6`}>
+          <div
+            className="relative rounded-3xl overflow-hidden shadow-2xl transition-all duration-300 group"
+            style={{
+              background: '#FFFFFF',
+              border: `2px solid ${C.gold}`,
+              boxShadow: '0 16px 36px -12px rgba(201,162,39,0.45)',
+            }}
+          >
+            {/* Slide Image Frame */}
+            <div
+              onClick={() => setSelected(spotlightItems[slideIndex])}
+              className="w-full aspect-[16/10] sm:aspect-[16/9] relative overflow-hidden cursor-pointer bg-stone-50"
+            >
+              {spotlightItems.map((prod, idx) => (
+                <div
+                  key={prod.id}
+                  className="absolute inset-0 transition-opacity duration-500 ease-in-out flex items-center justify-center"
+                  style={{
+                    opacity: idx === slideIndex ? 1 : 0,
+                    pointerEvents: idx === slideIndex ? 'auto' : 'none',
+                  }}
+                >
+                  <ProductVisual product={prod} size="large" />
+                </div>
+              ))}
+
+              {/* Promotional Badge on Slide */}
+              {spotlightItems[slideIndex]?.badge && spotlightItems[slideIndex]?.badge !== 'None' && (
+                <div className="absolute top-3.5 left-3.5 z-10">
+                  <span
+                    className="px-3 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-wider text-white shadow-md"
+                    style={{
+                      background: `linear-gradient(135deg, ${C.goldLight}, ${C.goldDark})`,
+                    }}
+                  >
+                    {spotlightItems[slideIndex].badge}
+                  </span>
+                </div>
+              )}
+
+              {/* Wishlist quick toggle on slide */}
               <button
-                key={product.id + '-' + i}
-                onClick={() => setSelected(product)}
-                className="flex-shrink-0 group relative w-24 h-24 sm:w-28 sm:h-28 rounded-3xl overflow-hidden transition-all duration-300 hover:scale-105"
-                style={{
-                  border: `2px solid ${C.gold}`,
-                  background: '#FFFFFF',
-                  boxShadow: '0 8px 22px -6px rgba(201,162,39,0.5)',
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleWishlist(spotlightItems[slideIndex].id);
                 }}
-                title={`${product.name} - ${formatINR(product.price)}`}
+                className="absolute top-3.5 right-3.5 z-10 w-9 h-9 rounded-full flex items-center justify-center transition-transform active:scale-90"
+                style={{
+                  background: 'rgba(255,255,255,0.88)',
+                  backdropFilter: 'blur(8px)',
+                  border: `1px solid ${C.blush}`,
+                  color: wishlist.includes(spotlightItems[slideIndex]?.id) ? C.red : C.inkSoft,
+                }}
+                aria-label="Add to wishlist"
               >
-                <ProductVisual product={product} />
+                <Heart size={16} fill={wishlist.includes(spotlightItems[slideIndex]?.id) ? C.red : 'none'} />
               </button>
-            ))}
+
+              {/* Left Arrow Button */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  prevSlide();
+                }}
+                className="absolute left-2.5 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-90 text-stone-800 hover:text-amber-900 shadow-md"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.92)',
+                  border: `1.5px solid ${C.gold}`,
+                  backdropFilter: 'blur(6px)',
+                }}
+                title="Previous image"
+              >
+                <ChevronLeft size={20} />
+              </button>
+
+              {/* Right Arrow Button */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  nextSlide();
+                }}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-90 text-stone-800 hover:text-amber-900 shadow-md"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.92)',
+                  border: `1.5px solid ${C.gold}`,
+                  backdropFilter: 'blur(6px)',
+                }}
+                title="Next image"
+              >
+                <ChevronRight size={20} />
+              </button>
+
+              {/* Bottom Gradient overlay */}
+              <div
+                className="absolute inset-x-0 bottom-0 h-16 pointer-events-none"
+                style={{
+                  background: 'linear-gradient(to top, rgba(0,0,0,0.4) 0%, transparent 100%)',
+                }}
+              />
+            </div>
+
+            {/* Card Content & Action Bar */}
+            <div className="p-4 sm:p-5 flex items-center justify-between gap-3 bg-white">
+              <div
+                onClick={() => setSelected(spotlightItems[slideIndex])}
+                className="flex-1 min-w-0 cursor-pointer text-left"
+              >
+                <span className="text-[10px] uppercase font-bold tracking-wider" style={{ color: C.goldDark }}>
+                  {spotlightItems[slideIndex]?.category}
+                </span>
+                <h3
+                  style={{ fontFamily: "'Playfair Display', serif", color: C.ink }}
+                  className="text-base sm:text-lg font-bold truncate leading-tight mt-0.5"
+                >
+                  {spotlightItems[slideIndex]?.name}
+                </h3>
+                <p className="text-sm font-extrabold mt-0.5" style={{ color: C.goldDark }}>
+                  {formatINR(spotlightItems[slideIndex]?.price)}
+                </p>
+              </div>
+
+              {/* Actions: Direct WhatsApp & View Button */}
+              <div className="flex items-center gap-2 flex-shrink-0">
+                <a
+                  href={`https://wa.me/918949540902?text=Hello%20Arwa%2053%20Collection%2C%20I%20am%20interested%20in%20inquiring%20about%20*${encodeURIComponent(spotlightItems[slideIndex]?.name || '')}*%20(Price%3A%20Rs.%20${spotlightItems[slideIndex]?.price}).`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  className="p-2.5 rounded-2xl flex items-center justify-center transition-transform active:scale-95 text-white"
+                  style={{ background: '#25D366', boxShadow: '0 4px 10px -2px rgba(37,211,102,0.4)' }}
+                  title="Inquire on WhatsApp"
+                >
+                  <MessageCircle size={17} />
+                </a>
+
+                <GoldButton
+                  onClick={() => setSelected(spotlightItems[slideIndex])}
+                  style={{ padding: '0.5rem 0.9rem', fontSize: '0.75rem' }}
+                >
+                  <span>View Details</span>
+                </GoldButton>
+              </div>
+            </div>
+
+            {/* Pagination Dot Indicators */}
+            <div className="pb-3 flex items-center justify-center gap-1.5 bg-white">
+              {spotlightItems.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setSlideIndex(i)}
+                  className="transition-all duration-300 rounded-full"
+                  style={{
+                    width: i === slideIndex ? '20px' : '6px',
+                    height: '6px',
+                    background: i === slideIndex ? C.gold : 'rgba(201,162,39,0.3)',
+                  }}
+                  aria-label={`Go to slide ${i + 1}`}
+                />
+              ))}
+            </div>
           </div>
         </div>
       )}
