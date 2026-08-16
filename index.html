@@ -109,6 +109,8 @@ function loadStoreInfo() {
   return DEFAULT_STORE_INFO;
 }
 
+let STORE_INFO = loadStoreInfo();
+
 /* ------------------------------------------------------------------ */
 /*  Product photos — real Arwa 53 Collection inventory                 */
 /* ------------------------------------------------------------------ */
@@ -197,6 +199,8 @@ function loadProducts() {
   } catch (e) {}
   return DEFAULT_PRODUCTS;
 }
+
+let PRODUCTS = loadProducts();
 
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                             */
