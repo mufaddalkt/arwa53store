@@ -731,7 +731,7 @@ function WishlistModal({ isOpen, onClose, wishlist, onToggleWishlist, onSelectPr
               href={whatsappWishlistUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full h-11 rounded-2xl flex items-center justify-center gap-2 font-semibold text-xs sm:text-sm text-white"
+              className="w-full h-11 rounded-2xl flex items-center justify-center gap-2 font-semibold text-xs sm:text-sm text-white transition-transform active:scale-95"
               style={{
                 background: '#25D366',
                 boxShadow: '0 6px 16px -6px rgba(37,211,102,0.5)',
@@ -740,18 +740,6 @@ function WishlistModal({ isOpen, onClose, wishlist, onToggleWishlist, onSelectPr
               <MessageCircle size={16} />
               <span>Inquire All on WhatsApp</span>
             </a>
-
-            <button
-              onClick={() => {
-                onClose();
-                onNavigateLocation();
-              }}
-              className="w-full py-2.5 rounded-2xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors"
-              style={{ background: '#fff', border: `1px solid ${C.blush}`, color: C.ink }}
-            >
-              <MapPin size={14} style={{ color: C.goldDark }} />
-              <span>Try In-Store (Banswara Store)</span>
-            </button>
           </div>
         )}
       </div>
@@ -760,11 +748,11 @@ function WishlistModal({ isOpen, onClose, wishlist, onToggleWishlist, onSelectPr
 }
 
 /* ------------------------------------------------------------------ */
-/*  Store Location Section — Detailed physical store showcase       */
+/*  Store Location Section — Google Maps Frame & Timings Showcase     */
 /* ------------------------------------------------------------------ */
-function StoreSection({ onCopyAddress, onCopyPhone }) {
+function StoreSection() {
   return (
-    <section id="store-location" className="max-w-5xl mx-auto px-5 py-12">
+    <section id="store-location" className="max-w-4xl mx-auto px-5 py-12">
       {/* Section Header */}
       <div className="text-center mb-8">
         <div
@@ -772,326 +760,123 @@ function StoreSection({ onCopyAddress, onCopyPhone }) {
           style={{ background: `${C.gold}22`, color: C.goldDark, border: `1px solid ${C.gold}44` }}
         >
           <MapPin size={12} />
-          <span>Physical Jewellery Store</span>
+          <span>Store Location & Map</span>
         </div>
         <ShimmerText size="2.2rem" as="h2">Visit Our Store in Banswara</ShimmerText>
         <p className="text-sm mt-2 max-w-lg mx-auto" style={{ color: C.inkSoft }}>
-          Experience the sparkle and craftsmanship of the Arwa 53 Collection in person. Browse our full catalogue, try on bespoke bangles, and get personalized styling advice.
+          Experience the sparkle and craftsmanship of the Arwa 53 Collection in person. Browse our full catalogue and try on bespoke pieces.
         </p>
       </div>
 
-      {/* Main Location Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
-        {/* Left Column: Address & Direct Actions (7 cols) */}
-        <div className="lg:col-span-7 flex flex-col gap-4">
-          {/* Primary Address Card */}
+      {/* Main Google Maps Frame & Store Hours Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-5 items-stretch">
+        {/* Interactive Embedded Google Map Frame */}
+        <div
+          className="md:col-span-7 lg:col-span-8 rounded-3xl overflow-hidden relative flex flex-col"
+          style={{
+            background: '#FFFFFF',
+            border: `1.5px solid ${C.gold}`,
+            boxShadow: '0 12px 30px -10px rgba(201,162,39,0.35)',
+          }}
+        >
+          {/* Map Frame Header */}
           <div
-            className="p-6 rounded-3xl relative overflow-hidden"
+            className="px-4 py-3 flex items-center justify-between"
             style={{
               background: `linear-gradient(135deg, ${C.cream} 0%, #FFFFFF 100%)`,
-              border: `1.5px solid ${C.gold}`,
-              boxShadow: '0 12px 32px -12px rgba(201,162,39,0.3)',
+              borderBottom: `1px solid rgba(201,162,39,0.25)`,
             }}
           >
-            <div className="flex items-start gap-4">
-              <div
-                className="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0"
-                style={{
-                  background: `linear-gradient(135deg, ${C.goldLight}, ${C.gold} 70%, ${C.goldDark})`,
-                  color: C.cream,
-                  boxShadow: '0 6px 14px -4px rgba(201,162,39,0.5)',
-                }}
-              >
-                <Building2 size={24} />
+            <div className="flex items-center gap-2">
+              <div className="w-7 h-7 rounded-lg flex items-center justify-center text-white" style={{ background: `linear-gradient(135deg, ${C.goldLight}, ${C.goldDark})` }}>
+                <MapPin size={14} />
               </div>
-              <div className="flex-1">
-                <span className="text-[10px] uppercase font-extrabold tracking-widest px-2.5 py-0.5 rounded-md" style={{ background: C.ink, color: C.goldLight }}>
-                  Official Store Address
-                </span>
-                <h3 style={{ fontFamily: "'Playfair Display', serif", color: C.ink }} className="text-xl font-bold mt-2 leading-tight">
-                  Arwa 53 Collection
-                </h3>
-                <p className="text-sm font-semibold mt-1 leading-relaxed text-stone-800">
-                  {STORE_INFO.address}
-                </p>
+              <div>
+                <h4 className="text-xs font-bold leading-tight" style={{ color: C.ink }}>Arwa 53 Collection</h4>
+                <p className="text-[10px] text-stone-500 font-medium">Opp. Vaibhav Opticals, Nai Abadi, Banswara</p>
               </div>
             </div>
 
-            {/* Quick Action Buttons */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mt-5 pt-4" style={{ borderTop: `1px solid rgba(201,162,39,0.2)` }}>
-              <a
-                href={STORE_INFO.googleMapsUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="h-11 rounded-2xl flex items-center justify-center gap-2 font-bold text-xs transition-transform active:scale-95 shadow-md text-white"
-                style={{
-                  background: `linear-gradient(135deg, ${C.goldLight}, ${C.gold} 65%, ${C.goldDark})`,
-                }}
-              >
-                <Navigation size={14} />
-                <span>Get Directions (Google Maps)</span>
-              </a>
-
-              <button
-                onClick={onCopyAddress}
-                className="h-11 rounded-2xl flex items-center justify-center gap-2 font-bold text-xs transition-all active:scale-95"
-                style={{
-                  background: C.cream,
-                  border: `1px solid ${C.gold}`,
-                  color: C.ink,
-                }}
-              >
-                <Copy size={14} style={{ color: C.goldDark }} />
-                <span>Copy Full Address</span>
-              </button>
-            </div>
+            <a
+              href={STORE_INFO.googleMapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[11px] font-bold px-2.5 py-1 rounded-xl flex items-center gap-1 transition-transform active:scale-95 text-white"
+              style={{
+                background: `linear-gradient(135deg, ${C.goldLight}, ${C.gold} 70%, ${C.goldDark})`,
+              }}
+              title="Open in full Google Maps"
+            >
+              <span>Full Map</span>
+              <ExternalLink size={11} />
+            </a>
           </div>
 
-          {/* Contact Numbers Showcase Card */}
+          {/* Embedded Google Maps iFrame */}
+          <div className="w-full flex-1 min-h-[300px] relative bg-stone-100">
+            <iframe
+              title="Arwa 53 Collection Location Map"
+              src={STORE_INFO.mapEmbedUrl}
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              allowFullScreen=""
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="w-full h-full min-h-[300px]"
+            />
+          </div>
+
+          {/* Map Frame Footer */}
           <div
-            className="p-5 rounded-3xl"
-            style={{
-              background: '#FFFFFF',
-              border: `1px solid rgba(201,162,39,0.25)`,
-              boxShadow: '0 8px 24px -10px rgba(43,31,20,0.1)',
-            }}
+            className="px-4 py-2.5 text-[11px] font-medium flex items-center justify-between"
+            style={{ background: `${C.peach}55`, color: C.inkSoft }}
           >
-            <div className="flex items-center justify-between mb-3.5">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-xl flex items-center justify-center" style={{ background: `${C.peach}`, color: C.goldDark }}>
-                  <Phone size={16} />
-                </div>
-                <div>
-                  <h4 className="text-xs font-extrabold uppercase tracking-wider" style={{ color: C.ink }}>
-                    Direct Store Contact & Orders
-                  </h4>
-                  <p className="text-[11px]" style={{ color: C.inkSoft }}>Available daily for inquiries & consultations</p>
-                </div>
-              </div>
-
-              <button
-                onClick={onCopyPhone}
-                className="text-[11px] font-bold px-2.5 py-1 rounded-xl hover:bg-black/5 flex items-center gap-1"
-                style={{ color: C.goldDark }}
-                title="Copy phone numbers"
-              >
-                <Copy size={12} />
-                <span>Copy</span>
-              </button>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {/* Contact 1 */}
-              <div
-                className="p-3.5 rounded-2xl flex flex-col justify-between"
-                style={{ background: `${C.peach}44`, border: `1px solid rgba(201,162,39,0.2)` }}
-              >
-                <div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: C.goldDark }}>
-                    {STORE_INFO.contacts[0].label}
-                  </span>
-                  <p className="text-base font-extrabold mt-0.5" style={{ color: C.ink }}>
-                    {STORE_INFO.phone1}
-                  </p>
-                </div>
-
-                <div className="flex items-center gap-2 mt-3">
-                  <a
-                    href={`tel:${STORE_INFO.phone1}`}
-                    className="flex-1 py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-transform active:scale-95 text-white"
-                    style={{ background: `linear-gradient(135deg, ${C.goldLight}, ${C.goldDark})` }}
-                  >
-                    <Phone size={13} />
-                    <span>Call</span>
-                  </a>
-                  <a
-                    href={`https://wa.me/${STORE_INFO.phone1Raw}?text=Hello%20Arwa%2053%20Collection%2C%20I%20am%20inquiring%20about%20your%20jewellery%20collection.`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-1 py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-transform active:scale-95 text-white"
-                    style={{ background: '#25D366' }}
-                  >
-                    <MessageCircle size={13} />
-                    <span>WhatsApp</span>
-                  </a>
-                </div>
-              </div>
-
-              {/* Contact 2 */}
-              <div
-                className="p-3.5 rounded-2xl flex flex-col justify-between"
-                style={{ background: `${C.peach}44`, border: `1px solid rgba(201,162,39,0.2)` }}
-              >
-                <div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: C.goldDark }}>
-                    {STORE_INFO.contacts[1].label}
-                  </span>
-                  <p className="text-base font-extrabold mt-0.5" style={{ color: C.ink }}>
-                    {STORE_INFO.phone2}
-                  </p>
-                </div>
-
-                <div className="flex items-center gap-2 mt-3">
-                  <a
-                    href={`tel:${STORE_INFO.phone2}`}
-                    className="flex-1 py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-transform active:scale-95 text-white"
-                    style={{ background: `linear-gradient(135deg, ${C.goldLight}, ${C.goldDark})` }}
-                  >
-                    <Phone size={13} />
-                    <span>Call</span>
-                  </a>
-                  <a
-                    href={`https://wa.me/${STORE_INFO.phone2Raw}?text=Hello%20Arwa%2053%20Collection%2C%20I%20would%20like%20to%20know%20more%20about%20visiting%20your%20jewellery%20store.`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-1 py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-transform active:scale-95 text-white"
-                    style={{ background: '#25D366' }}
-                  >
-                    <MessageCircle size={13} />
-                    <span>WhatsApp</span>
-                  </a>
-                </div>
-              </div>
-            </div>
+            <span className="truncate">Near Mewad Hospital • Opp. Vaibhav Opticals (HC2W+PRQ)</span>
+            <a
+              href={STORE_INFO.googleMapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold flex-shrink-0 flex items-center gap-1 hover:underline ml-2"
+              style={{ color: C.goldDark }}
+            >
+              <Navigation size={11} />
+              <span>Directions</span>
+            </a>
           </div>
-
-          {/* Single Combined Location Details Card */}
-          <div
-            className="p-4 sm:p-5 rounded-2xl flex items-start gap-3.5"
-            style={{ background: '#FFFFFF', border: `1px solid ${C.blush}`, boxShadow: '0 4px 14px -4px rgba(43,31,20,0.08)' }}
-          >
-            <div className="w-10 h-10 rounded-2xl flex items-center justify-center flex-shrink-0 mt-0.5" style={{ background: `${C.peach}`, color: C.goldDark }}>
-              <MapPin size={20} />
-            </div>
-            <div className="flex-1 min-w-0">
-              <span className="text-[10px] uppercase font-extrabold tracking-wider" style={{ color: C.goldDark }}>
-                Store Address & Landmark
-              </span>
-              <p className="text-sm font-bold text-stone-900 leading-snug mt-0.5">
-                Najmi Bagh, Nai Abadi, Banswara, Rajasthan 327001
-              </p>
-              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-2 text-xs font-medium text-stone-600">
-                <span className="inline-flex items-center gap-1.5">
-                  <Building2 size={13} style={{ color: C.goldDark }} />
-                  <span>Near Shree Mewar Multispeciality Hospital</span>
-                </span>
-                <span className="text-stone-300 hidden sm:inline">•</span>
-                <span className="inline-flex items-center gap-1.5">
-                  <Compass size={13} style={{ color: C.goldDark }} />
-                  <span>Opposite Vaibhav Opticals</span>
-                </span>
-              </div>
-            </div>
-          </div>
-
         </div>
 
-        {/* Right Column: Visual Map Simulation & Timings Card (5 cols) */}
-        <div className="lg:col-span-5 flex flex-col gap-4">
-          {/* Interactive Embedded Google Map Frame */}
+        {/* Store Hours Card */}
+        <div className="md:col-span-5 lg:col-span-4 flex flex-col">
           <div
-            className="rounded-3xl overflow-hidden relative flex flex-col"
-            style={{
-              background: '#FFFFFF',
-              border: `1.5px solid ${C.gold}`,
-              boxShadow: '0 12px 30px -10px rgba(201,162,39,0.35)',
-            }}
-          >
-            {/* Map Frame Header */}
-            <div
-              className="px-4 py-3 flex items-center justify-between"
-              style={{
-                background: `linear-gradient(135deg, ${C.cream} 0%, #FFFFFF 100%)`,
-                borderBottom: `1px solid rgba(201,162,39,0.25)`,
-              }}
-            >
-              <div className="flex items-center gap-2">
-                <div className="w-7 h-7 rounded-lg flex items-center justify-center text-white" style={{ background: `linear-gradient(135deg, ${C.goldLight}, ${C.goldDark})` }}>
-                  <MapPin size={14} />
-                </div>
-                <div>
-                  <h4 className="text-xs font-bold leading-tight" style={{ color: C.ink }}>Arwa53 Collection</h4>
-                  <p className="text-[10px] text-stone-500 font-medium">Opp. Vaibhav Opticals, Nai Abadi, Banswara</p>
-                </div>
-              </div>
-
-              <a
-                href={STORE_INFO.googleMapsUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[11px] font-bold px-2.5 py-1 rounded-xl flex items-center gap-1 transition-transform active:scale-95 text-white"
-                style={{
-                  background: `linear-gradient(135deg, ${C.goldLight}, ${C.gold} 70%, ${C.goldDark})`,
-                }}
-                title="Open in full Google Maps"
-              >
-                <span>Full Map</span>
-                <ExternalLink size={11} />
-              </a>
-            </div>
-
-            {/* Embedded Google Maps iFrame */}
-            <div className="w-full h-[270px] sm:h-[300px] relative bg-stone-100">
-              <iframe
-                title="Arwa 53 Collection Location Map"
-                src={STORE_INFO.mapEmbedUrl}
-                width="100%"
-                height="100%"
-                style={{ border: 0 }}
-                allowFullScreen=""
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                className="w-full h-full"
-              />
-            </div>
-
-            {/* Map Frame Footer */}
-            <div
-              className="px-4 py-2.5 text-[11px] font-medium flex items-center justify-between"
-              style={{ background: `${C.peach}55`, color: C.inkSoft }}
-            >
-              <span className="truncate">Near Mewad Hospital • Opp. Vaibhav Opticals (HC2W+PRQ)</span>
-              <a
-                href={STORE_INFO.googleMapsUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-bold flex-shrink-0 flex items-center gap-1 hover:underline ml-2"
-                style={{ color: C.goldDark }}
-              >
-                <Navigation size={11} />
-                <span>Directions</span>
-              </a>
-            </div>
-          </div>
-
-          {/* Store Hours Card */}
-          <div
-            className="p-5 rounded-3xl"
+            className="p-5 rounded-3xl h-full flex flex-col justify-between"
             style={{
               background: '#FFFFFF',
               border: `1px solid rgba(201,162,39,0.25)`,
               boxShadow: '0 8px 24px -10px rgba(43,31,20,0.1)',
             }}
           >
-            <div className="flex items-center gap-2 mb-3">
-              <Clock size={16} style={{ color: C.goldDark }} />
-              <h4 className="text-xs font-extrabold uppercase tracking-wider" style={{ color: C.ink }}>
-                Store Hours & Timings
-              </h4>
-            </div>
+            <div>
+              <div className="flex items-center gap-2 mb-3">
+                <Clock size={16} style={{ color: C.goldDark }} />
+                <h4 className="text-xs font-extrabold uppercase tracking-wider" style={{ color: C.ink }}>
+                  Store Hours & Timings
+                </h4>
+              </div>
 
-            <div className="space-y-2.5">
-              {STORE_INFO.hours.map((h, i) => (
-                <div key={i} className="flex items-center justify-between text-xs py-1.5" style={{ borderBottom: i === 0 ? `1px dashed ${C.blush}` : 'none' }}>
-                  <div>
-                    <p className="font-bold" style={{ color: C.ink }}>{h.days}</p>
-                    <p className="font-semibold text-[11px]" style={{ color: C.inkSoft }}>{h.time}</p>
+              <div className="space-y-2.5">
+                {STORE_INFO.hours.map((h, i) => (
+                  <div key={i} className="flex items-center justify-between text-xs py-2" style={{ borderBottom: i === 0 ? `1px dashed ${C.blush}` : 'none' }}>
+                    <div>
+                      <p className="font-bold" style={{ color: C.ink }}>{h.days}</p>
+                      <p className="font-semibold text-[11px]" style={{ color: C.inkSoft }}>{h.time}</p>
+                    </div>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: `${C.peach}`, color: C.goldDark }}>
+                      {h.badge}
+                    </span>
                   </div>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: `${C.peach}`, color: C.goldDark }}>
-                    {h.badge}
-                  </span>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
 
             {/* WhatsApp Contact CTA */}
@@ -1099,10 +884,9 @@ function StoreSection({ onCopyAddress, onCopyPhone }) {
               href={STORE_INFO.whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-4 w-full py-2.5 rounded-2xl flex items-center justify-center gap-2 font-bold text-xs transition-transform active:scale-95"
+              className="mt-5 w-full py-2.5 rounded-2xl flex items-center justify-center gap-2 font-bold text-xs transition-transform active:scale-95 text-white"
               style={{
                 background: '#25D366',
-                color: '#FFFFFF',
                 boxShadow: '0 4px 12px -3px rgba(37,211,102,0.4)',
               }}
             >
@@ -3055,7 +2839,7 @@ function App() {
       </main>
 
       {/* Store Location Section */}
-      <StoreSection onCopyAddress={handleCopyAddress} onCopyPhone={handleCopyPhones} />
+      <StoreSection />
 
       {/* footer */}
       <footer className="px-5 py-12 text-center relative" style={{ background: C.ink, color: C.cream }}>
