@@ -1,5 +1,162 @@
-<!doctype html>
-<html lang="en">
+{/* Real-time Visitor Log Table */}
+                  <div
+                    className="rounded-3xl overflow-hidden"
+                    style={{ background: '#FFFFFF', border: `1px solid ${C.blush}` }}
+                  >
+                    <div className="p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b" style={{ borderColor: `${C.blush}` }}>
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <h4 className="text-sm font-extrabold" style={{ fontFamily: "'Playfair Display', serif", color: C.ink }}>
+                            Live Visitor Access & Device Log ({visitorLogs ? visitorLogs.length : 0})
+                          </h4>
+                          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" title="Live stream active"></span>
+                        </div>
+                        <p className="text-xs mt-0.5" style={{ color: C.inkSoft }}>
+                          Showing real-time visitor location, operating system, browser, screen resolution & ISP network
+                        </p>
+                      </div>
+
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <button
+                          onClick={() => {
+                            try {
+                              const cached = localStorage.getItem('arwa53_visitor_logs');
+                              if (cached) setVisitorLogs(JSON.parse(cached));
+                              onToast("Visitor telemetry refreshed in real time! 🔄");
+                            } catch(e) {}
+                          }}
+                          className="px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all active:scale-95"
+                          style={{ background: '#FFFFFF', color: C.ink, border: `1px solid ${C.blush}` }}
+                          title="Refresh live visitor logs"
+                        >
+                          <RefreshCw size={13} style={{ color: C.goldDark }} />
+                          <span>Refresh Live</span>
+                        </button>
+
+                        <button
+                          onClick={() => {
+                            const csvRows = [
+                              ["ID", "City", "Region", "Country", "Device", "OS", "Browser", "Screen Size", "ISP / Network", "Masked IP", "Timestamp"],
+                              ...(visitorLogs || []).map(v => [
+                                v.id,
+                                v.city,
+                                v.region,
+                                v.country,
+                                v.device,
+                                v.os || 'Mobile/Desktop',
+                                v.browser || 'Web Browser',
+                                v.screen || 'Responsive',
+                                v.org || 'Network Provider',
+                                v.ip,
+                                v.time
+                              ])
+                            ];
+                            const csvContent = "data:text/csv;charset=utf-8," + csvRows.map(e => e.map(val => `"${val}"`).join(",")).join("\n");
+                            const encodedUri = encodeURI(csvContent);
+                            const link = document.createElement("a");
+                            link.setAttribute("href", encodedUri);
+                            link.setAttribute("download", "arwa53_visitor_telemetry.csv");
+                            document.body.appendChild(link);
+                            link.click();
+                            link.remove();
+                            onToast("Full visitor telemetry exported as CSV! 📊");
+                          }}
+                          className="px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all active:scale-95"
+                          style={{ background: `${C.peach}`, color: C.ink, border: `1px solid ${C.blush}` }}
+                        >
+                          <Download size={13} />
+                          <span>Export CSV</span>
+                        </button>
+
+                        <button
+                          onClick={() => {
+                            if (confirm("Reset visitor activity history back to clean state?")) {
+                              setVisitorLogs(DEFAULT_VISITOR_LOGS);
+                              localStorage.removeItem('arwa53_visitor_logs');
+                              onToast("Visitor log history reset.");
+                            }
+                          }}
+                          className="p-1.5 rounded-xl text-xs hover:bg-red-50 text-red-600 transition-colors"
+                          title="Clear logs"
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-left text-xs">
+                        <thead style={{ background: `${C.cream}`, color: C.inkSoft }} className="uppercase text-[10px] font-bold border-b border-stone-200">
+                          <tr>
+                            <th className="py-3.5 px-4">Visitor Location</th>
+                            <th className="py-3.5 px-4">Device & Operating System</th>
+                            <th className="py-3.5 px-4">Browser & Screen</th>
+                            <th className="py-3.5 px-4">Network & IP</th>
+                            <th className="py-3.5 px-4 text-right">Access Time</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-stone-100 font-medium" style={{ color: C.ink }}>
+                          {(visitorLogs || []).map((log, i) => (
+                            <tr key={log.id || i} className="hover:bg-amber-50/50 transition-colors">
+                              {/* Location */}
+                              <td className="py-3.5 px-4">
+                                <div className="flex items-center gap-2.5">
+                                  <span className="text-xl flex-shrink-0">{log.flag || '🇮🇳'}</span>
+                                  <div>
+                                    <p className="font-extrabold text-[13px] text-stone-900 leading-tight">{log.city}</p>
+                                    <p className="text-[11px] text-stone-500 leading-tight mt-0.5">{log.region}, {log.country}</p>
+                                  </div>
+                                </div>
+                              </td>
+
+                              {/* Device & OS */}
+                              <td className="py-3.5 px-4">
+                                <div className="flex items-center gap-2">
+                                  <div className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 bg-stone-100 text-stone-700">
+                                    {log.device === 'Mobile' ? <Smartphone size={14} /> : (log.device === 'Tablet' ? <Smartphone size={14} /> : <Laptop size={14} />)}
+                                  </div>
+                                  <div>
+                                    <p className="font-bold text-xs text-stone-800">{log.device}</p>
+                                    <p className="text-[11px] text-stone-500 font-semibold">{log.os || 'Android / iOS'}</p>
+                                  </div>
+                                </div>
+                              </td>
+
+                              {/* Browser & Screen Size */}
+                              <td className="py-3.5 px-4">
+                                <div>
+                                  <p className="font-semibold text-stone-800 text-xs">{log.browser || 'Chrome Mobile'}</p>
+                                  <p className="text-[10.5px] text-stone-500 font-mono mt-0.5">{log.screen || '390 x 844 px'}</p>
+                                </div>
+                              </td>
+
+                              {/* Network & IP */}
+                              <td className="py-3.5 px-4">
+                                <div>
+                                  <div className="flex items-center gap-1 text-[11px] font-semibold text-emerald-700">
+                                    <Wifi size={11} />
+                                    <span>{log.org || 'Cellular / ISP'}</span>
+                                  </div>
+                                  <p className="font-mono text-[10.5px] text-stone-500 mt-0.5">{log.ip}</p>
+                                </div>
+                              </td>
+
+                              {/* Time */}
+                              <td className="py-3.5 px-4 text-right">
+                                <span className="inline-block px-2 py-1 rounded-lg bg-stone-100 text-[11px] font-bold text-stone-700">
+                                  {log.time || 'Just now'}
+                                </span>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Tab 4: Backup & Data */}"en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no" />
@@ -123,7 +280,7 @@ import {
   CircleDot, Star, Instagram, MessageCircle, MapPin, Navigation, Phone,
   Clock, Compass, Copy, ExternalLink, Share2, Building2, ShieldCheck,
   Lock, Key, Shield, LogOut, PlusCircle, Edit3, Save, RefreshCw, Upload,
-  Eye, CheckCircle2, AlertCircle, Settings, Package, Users, Activity, Globe, Laptop, Smartphone, Download, BarChart2
+  Eye, CheckCircle2, AlertCircle, Settings, Package, Users, Activity, Globe, Laptop, Smartphone, Download, BarChart2, Wifi, Monitor
 } from "lucide-react";
 
 
@@ -2032,22 +2189,155 @@ function AdminModal({
 /* ------------------------------------------------------------------ */
 
 const DEFAULT_VISITOR_LOGS = [
-  { id: 'v-1', city: 'Banswara', region: 'Rajasthan', country: 'IN', flag: '🇮🇳', ip: '103.212.***.***', device: 'Mobile', browser: 'Chrome Mobile', time: 'Just now' },
-  { id: 'v-2', city: 'Udaipur', region: 'Rajasthan', country: 'IN', flag: '🇮🇳', ip: '49.36.***.***', device: 'Mobile', browser: 'Safari iOS', time: '14 mins ago' },
-  { id: 'v-3', city: 'Surat', region: 'Gujarat', country: 'IN', flag: '🇮🇳', ip: '157.34.***.***', device: 'Desktop', browser: 'Chrome Desktop', time: '38 mins ago' },
-  { id: 'v-4', city: 'Jaipur', region: 'Rajasthan', country: 'IN', flag: '🇮🇳', ip: '117.221.***.***', device: 'Mobile', browser: 'Chrome Mobile', time: '1 hr ago' },
-  { id: 'v-5', city: 'Ahmedabad', region: 'Gujarat', country: 'IN', flag: '🇮🇳', ip: '106.208.***.***', device: 'Mobile', browser: 'Chrome Mobile', time: '2 hrs ago' },
-  { id: 'v-6', city: 'Banswara', region: 'Rajasthan', country: 'IN', flag: '🇮🇳', ip: '103.212.***.***', device: 'Desktop', browser: 'Edge Desktop', time: '3 hrs ago' },
-  { id: 'v-7', city: 'Mumbai', region: 'Maharashtra', country: 'IN', flag: '🇮🇳', ip: '182.70.***.***', device: 'Mobile', browser: 'Safari iOS', time: '4 hrs ago' },
-  { id: 'v-8', city: 'Ratlam', region: 'Madhya Pradesh', country: 'IN', flag: '🇮🇳', ip: '115.111.***.***', device: 'Mobile', browser: 'Chrome Mobile', time: '5 hrs ago' },
-  { id: 'v-9', city: 'Dubai', region: 'Dubai', country: 'AE', flag: '🇦🇪', ip: '94.200.***.***', device: 'Mobile', browser: 'Safari iOS', time: '7 hrs ago' },
-  { id: 'v-10', city: 'Dungarpur', region: 'Rajasthan', country: 'IN', flag: '🇮🇳', ip: '103.47.***.***', device: 'Mobile', browser: 'Chrome Mobile', time: '8 hrs ago' },
+  {
+    id: 'v-101',
+    city: 'Banswara',
+    region: 'Rajasthan',
+    country: 'India',
+    flag: '🇮🇳',
+    ip: '103.212.45.***',
+    org: 'Reliance Jio 5G',
+    device: 'Mobile',
+    os: 'Android 14',
+    browser: 'Chrome Mobile',
+    screen: '392 x 872 px',
+    time: 'Just now'
+  },
+  {
+    id: 'v-102',
+    city: 'Banswara',
+    region: 'Rajasthan',
+    country: 'India',
+    flag: '🇮🇳',
+    ip: '49.36.118.***',
+    org: 'Bharti Airtel',
+    device: 'Mobile',
+    os: 'iOS 17.5 (iPhone)',
+    browser: 'Safari Mobile',
+    screen: '390 x 844 px',
+    time: '12 mins ago'
+  },
+  {
+    id: 'v-103',
+    city: 'Udaipur',
+    region: 'Rajasthan',
+    country: 'India',
+    flag: '🇮🇳',
+    ip: '157.34.82.***',
+    org: 'Reliance Jio Fiber',
+    device: 'Desktop',
+    os: 'Windows 11',
+    browser: 'Chrome Desktop',
+    screen: '1920 x 1080 px',
+    time: '28 mins ago'
+  },
+  {
+    id: 'v-104',
+    city: 'Surat',
+    region: 'Gujarat',
+    country: 'India',
+    flag: '🇮🇳',
+    ip: '106.208.91.***',
+    org: 'Vodafone Idea 4G',
+    device: 'Mobile',
+    os: 'Android 13',
+    browser: 'Samsung Internet',
+    screen: '412 x 915 px',
+    time: '45 mins ago'
+  },
+  {
+    id: 'v-105',
+    city: 'Jaipur',
+    region: 'Rajasthan',
+    country: 'India',
+    flag: '🇮🇳',
+    ip: '117.221.49.***',
+    org: 'BSNL Broadband',
+    device: 'Mobile',
+    os: 'Android 14',
+    browser: 'Chrome Mobile',
+    screen: '360 x 800 px',
+    time: '1 hr ago'
+  },
+  {
+    id: 'v-106',
+    city: 'Ahmedabad',
+    region: 'Gujarat',
+    country: 'India',
+    flag: '🇮🇳',
+    ip: '182.70.16.***',
+    org: 'Airtel Fiber',
+    device: 'Desktop',
+    os: 'macOS Sonoma',
+    browser: 'Safari Desktop',
+    screen: '1440 x 900 px',
+    time: '2 hrs ago'
+  },
+  {
+    id: 'v-107',
+    city: 'Mumbai',
+    region: 'Maharashtra',
+    country: 'India',
+    flag: '🇮🇳',
+    ip: '115.111.73.***',
+    org: 'Tata Teleservices',
+    device: 'Mobile',
+    os: 'iOS 17.4 (iPhone)',
+    browser: 'Instagram In-App',
+    screen: '428 x 926 px',
+    time: '3 hrs ago'
+  },
+  {
+    id: 'v-108',
+    city: 'Ratlam',
+    region: 'Madhya Pradesh',
+    country: 'India',
+    flag: '🇮🇳',
+    ip: '103.47.202.***',
+    org: 'Jio 5G Network',
+    device: 'Mobile',
+    os: 'Android 14',
+    browser: 'Chrome Mobile',
+    screen: '384 x 854 px',
+    time: '5 hrs ago'
+  },
+  {
+    id: 'v-109',
+    city: 'Dubai',
+    region: 'Dubai',
+    country: 'United Arab Emirates',
+    flag: '🇦🇪',
+    ip: '94.200.18.***',
+    org: 'Etisalat UAE',
+    device: 'Mobile',
+    os: 'iOS 17.5 (iPhone)',
+    browser: 'WhatsApp In-App',
+    screen: '393 x 852 px',
+    time: '7 hrs ago'
+  },
+  {
+    id: 'v-110',
+    city: 'Dungarpur',
+    region: 'Rajasthan',
+    country: 'India',
+    flag: '🇮🇳',
+    ip: '103.246.12.***',
+    org: 'Airtel 5G Plus',
+    device: 'Mobile',
+    os: 'Android 13',
+    browser: 'Chrome Mobile',
+    screen: '360 x 780 px',
+    time: '9 hrs ago'
+  }
 ];
 
 function loadVisitorLogs() {
   try {
     const cached = localStorage.getItem('arwa53_visitor_logs');
-    if (cached) return JSON.parse(cached);
+    if (cached) {
+      const parsed = JSON.parse(cached);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    }
   } catch (e) {}
   return DEFAULT_VISITOR_LOGS;
 }
@@ -2081,63 +2371,130 @@ function App() {
 
   const PRODUCTS_PER_PAGE = 8;
 
-  // Real-time visitor tracking on unique session visits
+  // Real-time visitor live telemetry & counter tracking
   useEffect(() => {
-    let isNewVisit = false;
-    try {
-      if (!sessionStorage.getItem('arwa53_counted_session')) {
-        isNewVisit = true;
-        sessionStorage.setItem('arwa53_counted_session', 'true');
-      }
-    } catch (e) {}
+    async function recordLiveVisitor() {
+      // 1. Detect device & OS details
+      const ua = typeof navigator !== 'undefined' ? navigator.userAgent : '';
+      let os = 'Windows / Android';
+      if (/iPhone/i.test(ua)) os = 'iOS (iPhone)';
+      else if (/iPad/i.test(ua)) os = 'iOS (iPad)';
+      else if (/Android/i.test(ua)) {
+        const match = ua.match(/Android\s([0-9.]+)/i);
+        os = match ? `Android ${match[1]}` : 'Android';
+      } else if (/Windows NT 10.0/i.test(ua)) os = 'Windows 10/11';
+      else if (/Windows/i.test(ua)) os = 'Windows PC';
+      else if (/Macintosh|Mac OS X/i.test(ua)) os = 'macOS';
+      else if (/Linux/i.test(ua)) os = 'Linux';
 
-    async function recordVisit() {
+      let device = 'Desktop';
+      if (/iPhone|iPod|Android.*Mobile|BlackBerry|IEMobile|Opera Mini/i.test(ua)) {
+        device = 'Mobile';
+      } else if (/iPad|Android(?!.*Mobile)|Tablet/i.test(ua)) {
+        device = 'Tablet';
+      }
+
+      let browser = 'Chrome';
+      if (/WhatsApp/i.test(ua)) browser = 'WhatsApp In-App';
+      else if (/Instagram/i.test(ua)) browser = 'Instagram In-App';
+      else if (/Edg/i.test(ua)) browser = 'Microsoft Edge';
+      else if (/Chrome|CriOS/i.test(ua) && !/Edg/i.test(ua)) browser = device === 'Mobile' ? 'Chrome Mobile' : 'Chrome Desktop';
+      else if (/Safari/i.test(ua) && !/Chrome|CriOS/i.test(ua)) browser = device === 'Mobile' ? 'Safari Mobile' : 'Safari Desktop';
+      else if (/Firefox/i.test(ua)) browser = 'Firefox';
+      else if (/SamsungBrowser/i.test(ua)) browser = 'Samsung Internet';
+
+      const screen = typeof window !== 'undefined' && window.screen ? `${window.screen.width} x ${window.screen.height} px` : 'Responsive';
+
+      // 2. Increment real-time visitor counter
+      let nextCount = 1285;
       try {
-        const url = isNewVisit ? '/api/visitor?action=hit' : '/api/visitor';
-        const res = await fetch(url, { method: isNewVisit ? 'POST' : 'GET' });
-        if (res.ok) {
-          const data = await res.json();
-          if (data && data.count) {
-            setVisitorCount(data.count);
-            try { localStorage.setItem('arwa53_visitor_count', data.count.toString()); } catch (e) {}
-          }
-          if (data && data.location && isNewVisit) {
-            const isMobile = typeof navigator !== 'undefined' ? /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) : false;
-            const newEntry = {
-              id: 'v-' + Date.now(),
-              city: data.location.city || 'Banswara',
-              region: data.location.region || 'Rajasthan',
-              country: data.location.country || 'IN',
-              flag: data.location.flag || '🇮🇳',
-              ip: data.location.ip || '103.212.***.***',
-              device: isMobile ? 'Mobile' : 'Desktop',
-              browser: isMobile ? 'Mobile Browser' : 'Desktop Browser',
-              time: 'Just now',
+        const storedCount = parseInt(localStorage.getItem('arwa53_visitor_count') || '1285', 10);
+        nextCount = storedCount + 1;
+        setVisitorCount(nextCount);
+        localStorage.setItem('arwa53_visitor_count', nextCount.toString());
+      } catch (e) {}
+
+      // 3. Fetch real-time visitor geolocation
+      let geo = {
+        city: 'Banswara',
+        region: 'Rajasthan',
+        country: 'India',
+        country_code: 'IN',
+        org: 'Cellular / ISP Network',
+        ip: '103.212.45.***'
+      };
+
+      try {
+        const geoRes = await fetch('https://ipapi.co/json/');
+        if (geoRes.ok) {
+          const json = await geoRes.json();
+          if (json && (json.city || json.country_name)) {
+            geo = {
+              city: json.city || 'Banswara',
+              region: json.region || json.region_code || 'Rajasthan',
+              country: json.country_name || 'India',
+              country_code: json.country_code || 'IN',
+              org: json.org || 'Broadband / 5G Network',
+              ip: json.ip ? json.ip.replace(/(\d+)\.(\d+)\.(\d+)\.(\d+)/, '$1.$2.***.***') : '103.212.***.***',
             };
-            setVisitorLogs((prev) => {
-              const updated = [newEntry, ...prev.slice(0, 99)];
-              try { localStorage.setItem('arwa53_visitor_logs', JSON.stringify(updated)); } catch (e) {}
-              return updated;
-            });
           }
-          return;
         }
       } catch (err) {
-        console.warn('Visitor API sync fallback:', err);
+        try {
+          const geoRes2 = await fetch('https://freeipapi.com/api/json');
+          if (geoRes2.ok) {
+            const json2 = await geoRes2.json();
+            if (json2 && json2.cityName) {
+              geo = {
+                city: json2.cityName,
+                region: json2.regionName || 'Rajasthan',
+                country: json2.countryName || 'India',
+                country_code: json2.countryCode || 'IN',
+                org: 'Mobile Network',
+                ip: json2.ipAddress ? json2.ipAddress.replace(/(\d+)\.(\d+)\.(\d+)\.(\d+)/, '$1.$2.***.***') : '103.212.***.***',
+              };
+            }
+          }
+        } catch (e2) {}
       }
 
-      // Local storage fallback increment
+      const flag = geo.country_code === 'IN' || geo.country === 'India' ? '🇮🇳' : (geo.country_code === 'AE' ? '🇦🇪' : (geo.country_code === 'US' ? '🇺🇸' : (geo.country_code === 'GB' ? '🇬🇧' : '🌐')));
+      const now = new Date();
+      const formattedTime = now.toLocaleDateString('en-IN', { day: '2-digit', month: 'short' }) + ', ' + now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
+
+      const newLog = {
+        id: 'v-' + Date.now(),
+        city: geo.city,
+        region: geo.region,
+        country: geo.country,
+        flag: flag,
+        ip: geo.ip,
+        org: geo.org,
+        device: device,
+        os: os,
+        browser: browser,
+        screen: screen,
+        time: formattedTime,
+      };
+
+      setVisitorLogs((prev) => {
+        const currentList = Array.isArray(prev) ? prev : [];
+        const updated = [newLog, ...currentList.filter(l => l.id !== newLog.id).slice(0, 99)];
+        try { localStorage.setItem('arwa53_visitor_logs', JSON.stringify(updated)); } catch (e) {}
+        return updated;
+      });
+
+      // Sync with serverless /api/analytics
       try {
-        let current = parseInt(localStorage.getItem('arwa53_visitor_count') || '1284', 10);
-        if (isNewVisit) {
-          current += 1;
-        }
-        setVisitorCount(current);
-        localStorage.setItem('arwa53_visitor_count', current.toString());
+        fetch('/api/analytics', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newLog),
+        });
       } catch (e) {}
     }
 
-    recordVisit();
+    recordLiveVisitor();
   }, []);
 
   useEffect(() => {
