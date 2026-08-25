@@ -24,6 +24,11 @@ dist-ssr
 *.sln
 *.sw?
 
+# Next.js build output
+.next
+out
+
 # Temporary / Scratch
 *.tmp
 *.bak
+
