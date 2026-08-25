@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://arwa53.com/sitemap.xml
