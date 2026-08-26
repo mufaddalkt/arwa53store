@@ -9,6 +9,37 @@
 <link rel="apple-touch-icon" id="dynamic-apple-favicon" />
 <script>
 (function() {
+  // Suppress third-party development and cross-origin tracking notices in DevTools console
+  var origWarn = console.warn;
+  var origError = console.error;
+  console.warn = function() {
+    var args = Array.prototype.slice.call(arguments);
+    var text = args.map(function(a) { return typeof a === 'string' ? a : ((a && a.message) || ''); }).join(' ');
+    if (
+      text.indexOf('cdn.tailwindcss.com') !== -1 ||
+      text.indexOf('in-browser Babel transformer') !== -1 ||
+      text.indexOf('Content-Security-Policy') !== -1 ||
+      text.indexOf('Partitioned cookie') !== -1 ||
+      text.indexOf('storage access was provided') !== -1
+    ) {
+      return;
+    }
+    origWarn.apply(console, args);
+  };
+  console.error = function() {
+    var args = Array.prototype.slice.call(arguments);
+    var text = args.map(function(a) { return typeof a === 'string' ? a : ((a && a.message) || ''); }).join(' ');
+    if (
+      text.indexOf('csp_test=true') !== -1 ||
+      text.indexOf('maps.googleapis.com') !== -1 ||
+      text.indexOf('gen_204') !== -1 ||
+      text.indexOf('Cross-Origin Request Blocked') !== -1
+    ) {
+      return;
+    }
+    origError.apply(console, args);
+  };
+
   function renderLogoFavicon() {
     try {
       if (!window.LOGO_SRC) {
@@ -822,7 +853,8 @@ function StoreSection() {
               style={{ border: 0 }}
               allowFullScreen=""
               loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
+              referrerPolicy="no-referrer"
+              sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
               className="w-full h-full min-h-[300px]"
             />
           </div>
