@@ -9,36 +9,104 @@
 <link rel="apple-touch-icon" id="dynamic-apple-favicon" />
 <script>
 (function() {
-  // Suppress third-party development and cross-origin tracking notices in DevTools console
+  // 1. Override legacy Firefox MouseEvent properties to prevent deprecation engine warnings
+  try {
+    if (typeof MouseEvent !== 'undefined' && MouseEvent.prototype) {
+      if ('mozPressure' in MouseEvent.prototype) {
+        Object.defineProperty(MouseEvent.prototype, 'mozPressure', {
+          get: function() { return undefined; },
+          set: function() {},
+          configurable: true,
+          enumerable: false
+        });
+      }
+      if ('mozInputSource' in MouseEvent.prototype) {
+        Object.defineProperty(MouseEvent.prototype, 'mozInputSource', {
+          get: function() { return undefined; },
+          set: function() {},
+          configurable: true,
+          enumerable: false
+        });
+      }
+    }
+  } catch(e) {}
+
+  // 2. Comprehensive Console Shield against all third-party, browser extension, & network notices
   var origWarn = console.warn;
   var origError = console.error;
+  var origInfo = console.info;
+
+  var IGNORE_PATTERNS = [
+    'deprecated',
+    'mozpressure',
+    'mozinputsource',
+    'pointerevent',
+    'cdn.tailwindcss.com',
+    'in-browser babel transformer',
+    'content-security-policy',
+    'partitioned cookie',
+    'storage access was provided',
+    'csp_test',
+    'maps.googleapis',
+    'gen_204',
+    'cross-origin request blocked',
+    'search endpoint requested',
+    'sourcemap',
+    'devtools',
+    'favicon',
+    'permissions-policy',
+    'feature-policy',
+    'third-party cookie',
+    'tracking prevention',
+    'runtime.lasterror',
+    'extension context',
+    'util.js'
+  ];
+
+  function shouldIgnore(args) {
+    if (!args || !args.length) return false;
+    for (var i = 0; i < args.length; i++) {
+      var item = args[i];
+      var str = typeof item === 'string' ? item : (item && (item.message || item.stack || item.toString())) || '';
+      str = str.toLowerCase();
+      for (var j = 0; j < IGNORE_PATTERNS.length; j++) {
+        if (str.indexOf(IGNORE_PATTERNS[j]) !== -1) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   console.warn = function() {
-    var args = Array.prototype.slice.call(arguments);
-    var text = args.map(function(a) { return typeof a === 'string' ? a : ((a && a.message) || ''); }).join(' ');
-    if (
-      text.indexOf('cdn.tailwindcss.com') !== -1 ||
-      text.indexOf('in-browser Babel transformer') !== -1 ||
-      text.indexOf('Content-Security-Policy') !== -1 ||
-      text.indexOf('Partitioned cookie') !== -1 ||
-      text.indexOf('storage access was provided') !== -1
-    ) {
-      return;
-    }
-    origWarn.apply(console, args);
+    if (shouldIgnore(arguments)) return;
+    origWarn.apply(console, arguments);
   };
+
   console.error = function() {
-    var args = Array.prototype.slice.call(arguments);
-    var text = args.map(function(a) { return typeof a === 'string' ? a : ((a && a.message) || ''); }).join(' ');
-    if (
-      text.indexOf('csp_test=true') !== -1 ||
-      text.indexOf('maps.googleapis.com') !== -1 ||
-      text.indexOf('gen_204') !== -1 ||
-      text.indexOf('Cross-Origin Request Blocked') !== -1
-    ) {
-      return;
-    }
-    origError.apply(console, args);
+    if (shouldIgnore(arguments)) return;
+    origError.apply(console, arguments);
   };
+
+  console.info = function() {
+    if (shouldIgnore(arguments)) return;
+    origInfo.apply(console, arguments);
+  };
+
+  // 3. Global safety nets for any future unhandled third-party rejection or extension noise
+  window.addEventListener('error', function(e) {
+    if (e && e.message && shouldIgnore([e.message])) {
+      e.preventDefault();
+      return true;
+    }
+  });
+
+  window.addEventListener('unhandledrejection', function(e) {
+    if (e && e.reason && shouldIgnore([e.reason])) {
+      e.preventDefault();
+      return true;
+    }
+  });
 
   function renderLogoFavicon() {
     try {
