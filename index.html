@@ -100,9 +100,12 @@
 }
 </script>
 <script src="https://unpkg.com/@babel/standalone@7.24.7/babel.min.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
   html, body { margin: 0; padding: 0; background: #FBE3CC; }
   #root { min-height: 100vh; }
+  .leaflet-container { font-family: inherit; }
 </style>
 </head>
 <body>
@@ -785,7 +788,59 @@ function WishlistModal({ isOpen, onClose, wishlist, onToggleWishlist, onSelectPr
 }
 
 /* ------------------------------------------------------------------ */
-/*  Store Location Section — Google Maps Frame & Timings Showcase     */
+/*  Interactive Store Map Component (Native Leaflet OSM - 0 Cookies)  */
+/* ------------------------------------------------------------------ */
+function StoreMap() {
+  const mapContainerRef = React.useRef(null);
+  const mapInstanceRef = React.useRef(null);
+
+  React.useEffect(() => {
+    if (!mapContainerRef.current) return;
+    if (typeof L === 'undefined') return;
+
+    if (!mapInstanceRef.current) {
+      try {
+        const map = L.map(mapContainerRef.current, {
+          center: [23.551843, 74.447071],
+          zoom: 16,
+          zoomControl: true,
+          scrollWheelZoom: false,
+        });
+
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 19,
+          attribution: '&copy; OpenStreetMap contributors',
+        }).addTo(map);
+
+        const customIcon = L.divIcon({
+          className: 'custom-arwa-pin',
+          html: '<div style="background:linear-gradient(135deg,#D4AF37,#9E7432);color:white;padding:4px 9px;border-radius:14px;font-size:11px;font-weight:700;box-shadow:0 3px 10px rgba(0,0,0,0.3);white-space:nowrap;border:1.5px solid #FAF0D7;display:inline-flex;align-items:center;gap:4px;">📍 Arwa 53 Store</div>',
+          iconSize: [125, 30],
+          iconAnchor: [62, 30],
+        });
+
+        const marker = L.marker([23.551843, 74.447071], { icon: customIcon }).addTo(map);
+        marker.bindPopup('<div style="font-family:sans-serif;font-size:12px;color:#2B1F14;padding:2px;"><b style="color:#9E7432;">Arwa 53 Collection</b><br/>Near Mewad Hospital, Opp. Vaibhav Opticals<br/>Najmi Bagh, Nai Abadi, Banswara</div>').openPopup();
+
+        mapInstanceRef.current = map;
+      } catch (err) {}
+    }
+
+    return () => {
+      if (mapInstanceRef.current) {
+        try {
+          mapInstanceRef.current.remove();
+        } catch (e) {}
+        mapInstanceRef.current = null;
+      }
+    };
+  }, []);
+
+  return <div ref={mapContainerRef} className="w-full flex-1 min-h-[300px] z-0 relative bg-stone-100" style={{ minHeight: '300px' }} />;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Store Location Section — Interactive Map & Timings Showcase       */
 /* ------------------------------------------------------------------ */
 function StoreSection() {
   return (
@@ -807,7 +862,7 @@ function StoreSection() {
 
       {/* Main Google Maps Frame & Store Hours Grid */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-5 items-stretch">
-        {/* Interactive Embedded Google Map Frame */}
+        {/* Interactive Embedded Map Frame */}
         <div
           className="md:col-span-7 lg:col-span-8 rounded-3xl overflow-hidden relative flex flex-col"
           style={{
@@ -849,21 +904,8 @@ function StoreSection() {
             </a>
           </div>
 
-          {/* Embedded Google Maps iFrame */}
-          <div className="w-full flex-1 min-h-[300px] relative bg-stone-100">
-            <iframe
-              title="Arwa 53 Collection Location Map"
-              src={STORE_INFO.mapEmbedUrl}
-              width="100%"
-              height="100%"
-              style={{ border: 0 }}
-              allowFullScreen=""
-              loading="lazy"
-              referrerPolicy="no-referrer"
-              sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
-              className="w-full h-full min-h-[300px]"
-            />
-          </div>
+          {/* Native In-Page Interactive Map */}
+          <StoreMap />
 
           {/* Map Frame Footer */}
           <div
