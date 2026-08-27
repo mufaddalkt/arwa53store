@@ -2421,7 +2421,7 @@ function App() {
     }
   });
 
-  const PRODUCTS_PER_PAGE = 8;
+  const PRODUCTS_PER_PAGE = 12;
 
   // Real-time visitor live telemetry & counter tracking
   useEffect(() => {
@@ -3158,144 +3158,55 @@ function App() {
           </div>
         </div>
       )}
-      {/* ── 1. RINGS COLLECTION SHOWCASE SECTION ── */}
-      <section id="rings-section" className="max-w-5xl mx-auto px-5 py-8 scroll-mt-20">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-5 gap-3">
-          <div>
-            <div
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider mb-1.5"
-              style={{ background: `${C.gold}18`, color: C.goldDark, border: `1px solid ${C.gold}35` }}
-            >
-              <Sparkles size={11} />
-              <span>Signature Collection</span>
-            </div>
-            <h2 style={{ fontFamily: "'Playfair Display', serif", color: C.ink }} className="text-2xl sm:text-3xl font-bold tracking-tight">
-              Rings Collection
-            </h2>
-            <p className="text-xs sm:text-sm mt-0.5" style={{ color: C.inkSoft }}>
-              Handcrafted Gold & Gemstone Rings from the Arwa 53 Collection
-            </p>
-          </div>
-          <button
-            onClick={() => { setCategory('Rings'); document.getElementById('catalog-section')?.scrollIntoView({ behavior: 'smooth' }); }}
-            className="text-xs font-extrabold flex items-center gap-1 hover:underline"
-            style={{ color: C.goldDark }}
-          >
-            <span>View All Rings ({products.filter(p => p.category === 'Rings').length})</span>
-            <ChevronRight size={14} />
-          </button>
-        </div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3.5">
-          {products.filter(p => p.category === 'Rings').slice(0, 8).map((product, i) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              index={i}
-              onOpen={setSelected}
-              isWishlisted={wishlist.includes(product.id)}
-              onToggleWishlist={toggleWishlist}
-            />
-          ))}
-        </div>
-      </section>
 
-      {/* ── 2. EARRINGS COLLECTION SHOWCASE SECTION ── */}
-      <section id="earrings-section" className="max-w-5xl mx-auto px-5 py-8 scroll-mt-20">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-5 gap-3">
-          <div>
-            <div
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider mb-1.5"
-              style={{ background: `${C.gold}18`, color: C.goldDark, border: `1px solid ${C.gold}35` }}
-            >
-              <Gem size={11} />
-              <span>Signature Collection</span>
-            </div>
-            <h2 style={{ fontFamily: "'Playfair Display', serif", color: C.ink }} className="text-2xl sm:text-3xl font-bold tracking-tight">
-              Earrings Collection
-            </h2>
-            <p className="text-xs sm:text-sm mt-0.5" style={{ color: C.inkSoft }}>
-              Royal Drops, Jhumkas & Studs from the Arwa 53 Collection
-            </p>
-          </div>
-          <button
-            onClick={() => { setCategory('Earrings'); document.getElementById('catalog-section')?.scrollIntoView({ behavior: 'smooth' }); }}
-            className="text-xs font-extrabold flex items-center gap-1 hover:underline"
-            style={{ color: C.goldDark }}
+      {/* ── MAIN CATALOG & CATEGORY SHOWCASE SECTION ── */}
+      <main id="catalog-section" className="max-w-5xl mx-auto px-4 sm:px-5 py-6 sm:py-8 scroll-mt-20">
+        {/* Section Heading & Category Description */}
+        <div className="text-center mb-6">
+          <div
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wider mb-2"
+            style={{ background: `${C.gold}20`, color: C.goldDark, border: `1px solid ${C.gold}40` }}
           >
-            <span>View All Earrings ({products.filter(p => p.category === 'Earrings').length})</span>
-            <ChevronRight size={14} />
-          </button>
-        </div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3.5">
-          {products.filter(p => p.category === 'Earrings').slice(0, 8).map((product, i) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              index={i}
-              onOpen={setSelected}
-              isWishlisted={wishlist.includes(product.id)}
-              onToggleWishlist={toggleWishlist}
-            />
-          ))}
-        </div>
-      </section>
-
-      {/* ── 3. CHAINS COLLECTION SHOWCASE SECTION ── */}
-      <section id="chains-section" className="max-w-5xl mx-auto px-5 py-8 scroll-mt-20">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-5 gap-3">
-          <div>
-            <div
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider mb-1.5"
-              style={{ background: `${C.gold}18`, color: C.goldDark, border: `1px solid ${C.gold}35` }}
-            >
-              <Link2 size={11} />
-              <span>Signature Collection</span>
-            </div>
-            <h2 style={{ fontFamily: "'Playfair Display', serif", color: C.ink }} className="text-2xl sm:text-3xl font-bold tracking-tight">
-              Chains Collection
-            </h2>
-            <p className="text-xs sm:text-sm mt-0.5" style={{ color: C.inkSoft }}>
-              Intricate Gold Links & Pendant Chains from the Arwa 53 Collection
-            </p>
+            <Sparkles size={12} />
+            <span>Exclusive Jewellery Collection</span>
           </div>
-          <button
-            onClick={() => { setCategory('Chains'); document.getElementById('catalog-section')?.scrollIntoView({ behavior: 'smooth' }); }}
-            className="text-xs font-extrabold flex items-center gap-1 hover:underline"
-            style={{ color: C.goldDark }}
-          >
-            <span>View All Chains ({products.filter(p => p.category === 'Chains').length})</span>
-            <ChevronRight size={14} />
-          </button>
+          <h2 style={{ fontFamily: "'Playfair Display', serif", color: C.ink }} className="text-2xl sm:text-3xl font-bold tracking-tight">
+            {category === 'All' ? 'Our Complete Collection' : `${category} Collection`}
+          </h2>
+          <p className="text-xs sm:text-sm mt-1 max-w-md mx-auto" style={{ color: C.inkSoft }}>
+            {category === 'All' && 'Browse our full boutique of handcrafted gold bangles, rings, earrings, and chains.'}
+            {category === 'Rings' && 'Exquisite handcrafted gold & gemstone rings with fine crystal stonework.'}
+            {category === 'Earrings' && 'Royal chandeliers, drops, jhumkas & solitaire crystal studs.'}
+            {category === 'Chains' && 'Premium handcrafted gold chains and intricate pendant links.'}
+            {category === 'Bracelets' && 'Signature handcrafted gold bangles with brilliant diamond cuts.'}
+          </p>
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3.5">
-          {products.filter(p => p.category === 'Chains').slice(0, 8).map((product, i) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              index={i}
-              onOpen={setSelected}
-              isWishlisted={wishlist.includes(product.id)}
-              onToggleWishlist={toggleWishlist}
-            />
-          ))}
-        </div>
-      </section>
 
-      <main id="catalog-section" className="max-w-5xl mx-auto px-5 pb-8 scroll-mt-20">
-        {/* category chips */}
-        <div className="flex items-center justify-between mb-5 flex-wrap gap-2">
-          <div className="flex gap-2 overflow-x-auto no-scrollbar">
+        {/* Category Navigation Bar on Top */}
+        <div className="flex items-center justify-center mb-6 overflow-x-auto no-scrollbar py-1">
+          <div className="flex gap-2 p-1.5 rounded-2xl bg-white/70 backdrop-blur-md shadow-sm border flex-nowrap" style={{ borderColor: `${C.gold}35` }}>
             {CATEGORIES.map((cat) => {
               const Icon = cat === 'All' ? Sparkles : CATEGORY_ICON[cat];
+              const count = cat === 'All' ? products.length : products.filter(p => p.category === cat).length;
               return (
-                <GhostButton key={cat} active={category === cat} onClick={() => setCategory(cat)} style={{ }}>
-                  <span className="chip-btn flex items-center gap-1.5"><Icon size={13} /> {cat}</span>
+                <GhostButton key={cat} active={category === cat} onClick={() => setCategory(cat)}>
+                  <span className="chip-btn flex items-center gap-1.5 text-xs sm:text-sm font-bold whitespace-nowrap">
+                    <Icon size={14} />
+                    <span>{cat}</span>
+                    <span
+                      className="text-[10px] px-1.5 py-0.5 rounded-full font-extrabold"
+                      style={{
+                        background: category === cat ? 'rgba(255,255,255,0.35)' : 'rgba(201,162,39,0.18)',
+                        color: category === cat ? '#FFFFFF' : C.goldDark,
+                      }}
+                    >
+                      {count}
+                    </span>
+                  </span>
                 </GhostButton>
               );
             })}
           </div>
-
-
         </div>
 
         {!ready ? (
