@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
 <title>Arwa 53 Collection</title>
 <meta name="theme-color" content="#F8D5B8" />
 <link rel="icon" type="image/png" id="dynamic-favicon" />
@@ -171,8 +171,17 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
-  html, body { margin: 0; padding: 0; background: #FBE3CC; }
-  #root { min-height: 100vh; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #FBE3CC;
+    overflow-x: hidden;
+    width: 100%;
+    -webkit-text-size-adjust: 100%;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+  #root { min-height: 100vh; overflow-x: hidden; width: 100%; }
   .leaflet-container { font-family: inherit; }
 </style>
 </head>
@@ -2691,6 +2700,8 @@ function App() {
   const HERO_VIDEOS = ['video1.mp4', 'video2.mp4', 'video3.mp4', 'video4.mp4', 'video5.mp4'];
   const [videoIndex, setVideoIndex] = useState(0);
   const videoRef = useRef(null);
+  const videoTouchStartX = useRef(null);
+  const slideTouchStartX = useRef(null);
 
   function prevVideo() {
     setVideoIndex((prev) => (prev - 1 + HERO_VIDEOS.length) % HERO_VIDEOS.length);
@@ -2698,6 +2709,44 @@ function App() {
 
   function nextVideo() {
     setVideoIndex((prev) => (prev + 1) % HERO_VIDEOS.length);
+  }
+
+  function handleVideoTouchStart(e) {
+    if (e.touches && e.touches[0]) {
+      videoTouchStartX.current = e.touches[0].clientX;
+    }
+  }
+
+  function handleVideoTouchEnd(e) {
+    if (videoTouchStartX.current === null) return;
+    if (e.changedTouches && e.changedTouches[0]) {
+      const diff = videoTouchStartX.current - e.changedTouches[0].clientX;
+      if (diff > 45) {
+        nextVideo();
+      } else if (diff < -45) {
+        prevVideo();
+      }
+    }
+    videoTouchStartX.current = null;
+  }
+
+  function handleSlideTouchStart(e) {
+    if (e.touches && e.touches[0]) {
+      slideTouchStartX.current = e.touches[0].clientX;
+    }
+  }
+
+  function handleSlideTouchEnd(e) {
+    if (slideTouchStartX.current === null) return;
+    if (e.changedTouches && e.changedTouches[0]) {
+      const diff = slideTouchStartX.current - e.changedTouches[0].clientX;
+      if (diff > 45) {
+        nextSlide();
+      } else if (diff < -45) {
+        prevSlide();
+      }
+    }
+    slideTouchStartX.current = null;
   }
 
   useEffect(() => {
@@ -2710,7 +2759,7 @@ function App() {
 
   return (
     <div
-      className="min-h-screen w-full"
+      className="min-h-screen w-full pb-20 sm:pb-8"
       style={{
         background: `linear-gradient(180deg, ${C.peach} 0%, ${C.blush} 30%, ${C.cream} 100%)`,
         fontFamily: "'Manrope', sans-serif",
@@ -2748,14 +2797,6 @@ function App() {
         .hero-delay-2 { transition-delay: .18s; }
         .hero-delay-3 { transition-delay: .28s; }
 
-        /* bestseller marquee: exactly 5 images moving right-to-left */
-        .marquee-track { display: flex; gap: 40px; width: max-content; animation: marqueeScroll 18s linear infinite; }
-        .marquee-track:hover { animation-play-state: paused; }
-        @keyframes marqueeScroll {
-          0% { transform: translateX(100vw); }
-          100% { transform: translateX(calc(-100% - 20px)); }
-        }
-
         /* tilt cards + shine sweep */
         .tilt-card { will-change: transform; }
         .tilt-card:hover { box-shadow: 0 20px 40px -16px rgba(43,31,20,0.35) !important; }
@@ -2792,30 +2833,44 @@ function App() {
 
       {/* header */}
       <header
-        className={`sticky top-0 z-30 flex items-center justify-between px-4 sm:px-6 py-3 ${scrolled ? 'header-scrolled' : ''}`}
+        className={`sticky top-0 z-30 flex items-center justify-between px-3.5 sm:px-6 py-2.5 sm:py-3 ${scrolled ? 'header-scrolled' : ''}`}
         style={{ background: `${C.cream}f2`, borderBottom: `1px solid rgba(201,162,39,0.25)`, backdropFilter: 'blur(10px)', transition: 'box-shadow .3s ease' }}
       >
-        <div className="flex items-center gap-3.5">
+        <div className="flex items-center gap-2.5 sm:gap-3.5">
           <div
             onClick={handleLogoClick}
-            className="w-12 h-12 sm:w-14 sm:h-14 rounded-full overflow-hidden flex-shrink-0 cursor-pointer transition-transform hover:scale-105"
+            className="w-11 h-11 sm:w-14 sm:h-14 rounded-full overflow-hidden flex-shrink-0 cursor-pointer transition-transform hover:scale-105"
             style={{ border: `2px solid ${C.gold}`, boxShadow: '0 4px 14px -3px rgba(201,162,39,0.55)' }}
           >
             <img src={LOGO_SRC} alt="Arwa 53 Collection" className="w-full h-full object-cover" />
           </div>
           <div>
-            <p style={{ fontFamily: "'Playfair Display', serif", color: C.ink }} className="text-[17px] sm:text-[20px] font-bold leading-none tracking-tight">
+            <p style={{ fontFamily: "'Playfair Display', serif", color: C.ink }} className="text-[16px] sm:text-[20px] font-bold leading-none tracking-tight">
               Arwa 53
             </p>
-            <p className="text-[10px] sm:text-[11px] tracking-[0.18em] uppercase font-semibold mt-0.5" style={{ color: C.goldDark }}>
+            <p className="text-[9.5px] sm:text-[11px] tracking-[0.18em] uppercase font-semibold mt-0.5" style={{ color: C.goldDark }}>
               Collection
             </p>
           </div>
         </div>
 
         {/* Center / Right Actions */}
-        <div className="flex items-center gap-1.5 sm:gap-2">
-          {/* Direct Call Header Button 1 */}
+        <div className="flex items-center gap-1 sm:gap-2">
+          {/* Direct Call Header Button (Mobile Compact Icon) */}
+          <a
+            href={`tel:${STORE_INFO.phone1}`}
+            className="sm:hidden flex items-center justify-center w-8 h-8 rounded-full text-white transition-transform active:scale-95 shadow-sm"
+            style={{
+              background: `linear-gradient(135deg, ${C.goldLight}, ${C.gold} 70%, ${C.goldDark})`,
+              boxShadow: '0 2px 8px -2px rgba(201,162,39,0.5)',
+            }}
+            title={`Call ${STORE_INFO.phone1}`}
+            aria-label="Call Store"
+          >
+            <Phone size={13} />
+          </a>
+
+          {/* Direct Call Header Button 1 (Desktop) */}
           <a
             href={`tel:${STORE_INFO.phone1}`}
             className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-transform active:scale-95 text-white"
@@ -2918,7 +2973,9 @@ function App() {
           {/* ── Video Showcase inside Hero ── */}
           <div className={`hero-in hero-delay-3 ${heroMounted ? 'show' : ''} mt-6 max-w-sm sm:max-w-md mx-auto`}>
             <div
-              className="relative rounded-3xl overflow-hidden shadow-2xl"
+              onTouchStart={handleVideoTouchStart}
+              onTouchEnd={handleVideoTouchEnd}
+              className="relative rounded-3xl overflow-hidden shadow-2xl touch-pan-y"
               style={{
                 border: `2px solid ${C.gold}`,
                 boxShadow: '0 20px 44px -14px rgba(201,162,39,0.5)',
@@ -3005,8 +3062,10 @@ function App() {
           >
             {/* Slide Image Frame */}
             <div
+              onTouchStart={handleSlideTouchStart}
+              onTouchEnd={handleSlideTouchEnd}
               onClick={() => setSelected(spotlightItems[slideIndex])}
-              className="w-full aspect-[16/10] sm:aspect-[16/9] relative overflow-hidden cursor-pointer bg-stone-50"
+              className="w-full aspect-[16/10] sm:aspect-[16/9] relative overflow-hidden cursor-pointer bg-stone-50 touch-pan-y"
             >
               {spotlightItems.map((prod, idx) => (
                 <div
@@ -3183,14 +3242,17 @@ function App() {
         </div>
 
         {/* Category Navigation Bar on Top */}
-        <div className="flex items-center justify-center mb-6 overflow-x-auto no-scrollbar py-1">
-          <div className="flex gap-2 p-1.5 rounded-2xl bg-white/70 backdrop-blur-md shadow-sm border flex-nowrap" style={{ borderColor: `${C.gold}35` }}>
+        <div className="w-full flex items-center justify-start sm:justify-center mb-6 overflow-x-auto no-scrollbar py-1 px-1 sm:px-0">
+          <div
+            className="flex gap-1.5 sm:gap-2 p-1.5 rounded-2xl bg-white/80 backdrop-blur-md shadow-sm border flex-nowrap mx-auto"
+            style={{ borderColor: `${C.gold}35`, WebkitOverflowScrolling: 'touch' }}
+          >
             {CATEGORIES.map((cat) => {
               const Icon = cat === 'All' ? Sparkles : CATEGORY_ICON[cat];
               const count = cat === 'All' ? products.length : products.filter(p => p.category === cat).length;
               return (
                 <GhostButton key={cat} active={category === cat} onClick={() => setCategory(cat)}>
-                  <span className="chip-btn flex items-center gap-1.5 text-xs sm:text-sm font-bold whitespace-nowrap">
+                  <span className="chip-btn flex items-center gap-1.5 text-xs sm:text-sm font-bold whitespace-nowrap py-0.5 px-0.5">
                     <Icon size={14} />
                     <span>{cat}</span>
                     <span
@@ -3412,7 +3474,7 @@ function App() {
       {/* Back to top floating button */}
       <button
         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-        className="back-to-top fixed bottom-5 right-5 z-40 w-11 h-11 rounded-full flex items-center justify-center"
+        className="back-to-top fixed bottom-20 sm:bottom-6 right-4 sm:right-6 z-40 w-11 h-11 rounded-full flex items-center justify-center shadow-lg"
         style={{
           background: `linear-gradient(135deg, ${C.goldLight}, ${C.gold} 65%, ${C.goldDark})`,
           boxShadow: '0 8px 20px -8px rgba(156,122,28,0.6)',
@@ -3424,6 +3486,76 @@ function App() {
       >
         <ChevronRight size={18} style={{ color: C.cream, transform: 'rotate(-90deg)' }} />
       </button>
+
+      {/* ── Mobile Quick Action Sticky Bottom Bar ── */}
+      <nav
+        className="sm:hidden fixed bottom-0 inset-x-0 z-40 px-3 py-1.5 flex items-center justify-around border-t shadow-2xl backdrop-blur-xl"
+        style={{
+          background: 'rgba(253, 246, 237, 0.95)',
+          borderColor: 'rgba(201,162,39,0.28)',
+          paddingBottom: 'calc(0.4rem + env(safe-area-inset-bottom, 0px))',
+        }}
+        aria-label="Mobile quick navigation"
+      >
+        <a
+          href={`https://wa.me/${STORE_INFO.phone1Raw || '919929285353'}?text=${encodeURIComponent('Hello Arwa 53 Collection, I would like to inquire about your jewellery pieces.')}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex flex-col items-center gap-0.5 py-1 px-2.5 rounded-xl active:scale-95 transition-transform"
+        >
+          <div className="w-8 h-8 rounded-full bg-[#25D366] text-white flex items-center justify-center shadow-sm">
+            <MessageCircle size={16} />
+          </div>
+          <span className="text-[10px] font-bold text-stone-800">WhatsApp</span>
+        </a>
+
+        <a
+          href={`tel:${STORE_INFO.phone1}`}
+          className="flex flex-col items-center gap-0.5 py-1 px-2.5 rounded-xl active:scale-95 transition-transform"
+        >
+          <div
+            className="w-8 h-8 rounded-full text-white flex items-center justify-center shadow-sm"
+            style={{ background: `linear-gradient(135deg, ${C.goldLight}, ${C.goldDark})` }}
+          >
+            <Phone size={14} />
+          </div>
+          <span className="text-[10px] font-bold text-stone-800">Call Us</span>
+        </a>
+
+        <button
+          onClick={scrollToLocation}
+          className="flex flex-col items-center gap-0.5 py-1 px-2.5 rounded-xl active:scale-95 transition-transform"
+        >
+          <div
+            className="w-8 h-8 rounded-full text-white flex items-center justify-center shadow-sm"
+            style={{ background: C.ink }}
+          >
+            <MapPin size={15} style={{ color: C.goldLight }} />
+          </div>
+          <span className="text-[10px] font-bold text-stone-800">Location</span>
+        </button>
+
+        <button
+          onClick={() => setWishlistOpen(true)}
+          className="flex flex-col items-center gap-0.5 py-1 px-2.5 rounded-xl active:scale-95 transition-transform relative"
+        >
+          <div
+            className="w-8 h-8 rounded-full flex items-center justify-center shadow-sm bg-white border"
+            style={{ borderColor: C.blush }}
+          >
+            <Heart size={15} fill={wishlist.length > 0 ? C.red : 'none'} style={{ color: wishlist.length > 0 ? C.red : C.inkSoft }} />
+            {wishlist.length > 0 && (
+              <span
+                className="absolute -top-0.5 right-2 w-4 h-4 rounded-full text-[9px] font-extrabold flex items-center justify-center text-white"
+                style={{ background: C.red }}
+              >
+                {wishlist.length}
+              </span>
+            )}
+          </div>
+          <span className="text-[10px] font-bold text-stone-800">Wishlist</span>
+        </button>
+      </nav>
 
       {/* Modals & Drawers */}
       <ProductModal
