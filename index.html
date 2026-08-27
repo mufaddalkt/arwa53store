@@ -249,9 +249,12 @@ const C = {
 
 const LOGO_SRC = window.LOGO_SRC;
 
-const CATEGORIES = ['All', 'Bracelets'];
+const CATEGORIES = ['All', 'Rings', 'Earrings', 'Chains', 'Bracelets'];
 
 const CATEGORY_ICON = {
+  Rings: Sparkles,
+  Earrings: Gem,
+  Chains: Link2,
   Bracelets: CircleDot,
 };
 
@@ -351,6 +354,39 @@ const DEFAULT_PRODUCTS = [
   { id: "img31", name: "Compass Star Bracelet", category: "Bracelets", price: 310, image: PRODUCT_IMAGES.img31, desc: "A handcrafted piece from the Arwa 53 Collection, finished in gold with detailed stonework." },
   { id: "img32", name: "Pearl Square Bracelet", category: "Bracelets", price: 372, image: PRODUCT_IMAGES.img32, desc: "A handcrafted piece from the Arwa 53 Collection, finished in gold with detailed stonework." },
   { id: "img33", name: "Abalone Heart Bracelet", category: "Bracelets", price: 252, image: PRODUCT_IMAGES.img33, desc: "A handcrafted piece from the Arwa 53 Collection, finished in gold with detailed stonework." },
+
+  // --- RINGS COLLECTION (9 items) ---
+  { id: "ring_1", name: "Royal Solitaire Gold Ring", category: "Rings", price: 299, image: "images/rings/image_1.png", desc: "An elegant handcrafted gold ring with fine crystal stonework from the Arwa 53 Collection." },
+  { id: "ring_2", name: "Floral Pave Diamond Ring", category: "Rings", price: 345, image: "images/rings/image_2.png", desc: "An elegant handcrafted gold ring with fine crystal stonework from the Arwa 53 Collection." },
+  { id: "ring_3", name: "Crown Jewel Emerald Ring", category: "Rings", price: 380, image: "images/rings/image_3.png", desc: "An elegant handcrafted gold ring with fine crystal stonework from the Arwa 53 Collection." },
+  { id: "ring_4", name: "Classic Gold Eternity Ring", category: "Rings", price: 260, image: "images/rings/image_4.png", desc: "An elegant handcrafted gold ring with fine crystal stonework from the Arwa 53 Collection." },
+  { id: "ring_5", name: "Clover Halo Gold Ring", category: "Rings", price: 315, image: "images/rings/image_5.png", desc: "An elegant handcrafted gold ring with fine crystal stonework from the Arwa 53 Collection." },
+  { id: "ring_6", name: "Marquise Cut Crystal Ring", category: "Rings", price: 395, image: "images/rings/image_6.png", desc: "An elegant handcrafted gold ring with fine crystal stonework from the Arwa 53 Collection." },
+  { id: "ring_7", name: "Vintage Statement Gold Ring", category: "Rings", price: 420, image: "images/rings/image_7.png", desc: "An elegant handcrafted gold ring with fine crystal stonework from the Arwa 53 Collection." },
+  { id: "ring_8", name: "Pave Weave Designer Ring", category: "Rings", price: 350, image: "images/rings/image_8.png", desc: "An elegant handcrafted gold ring with fine crystal stonework from the Arwa 53 Collection." },
+  { id: "ring_9", name: "Princess Cut Solitaire Ring", category: "Rings", price: 310, image: "images/rings/image_9.png", desc: "An elegant handcrafted gold ring with fine crystal stonework from the Arwa 53 Collection." },
+
+  // --- EARRINGS COLLECTION (9 items) ---
+  { id: "earring_1", name: "Cascading Diamond Drop Earrings", category: "Earrings", price: 320, image: "images/earrings/image_1.png", desc: "Luxurious gold drop earrings with sparkling crystal accents from the Arwa 53 Collection." },
+  { id: "earring_2", name: "Royal Chandelier Gold Earrings", category: "Earrings", price: 450, image: "images/earrings/image_2.png", desc: "Luxurious gold drop earrings with sparkling crystal accents from the Arwa 53 Collection." },
+  { id: "earring_3", name: "Floral Cluster Stud Earrings", category: "Earrings", price: 280, image: "images/earrings/image_3.png", desc: "Luxurious gold drop earrings with sparkling crystal accents from the Arwa 53 Collection." },
+  { id: "earring_4", name: "Emerald Halo Drop Earrings", category: "Earrings", price: 490, image: "images/earrings/image_4.png", desc: "Luxurious gold drop earrings with sparkling crystal accents from the Arwa 53 Collection." },
+  { id: "earring_5", name: "Vintage Filigree Hoop Earrings", category: "Earrings", price: 360, image: "images/earrings/image_5.png", desc: "Luxurious gold drop earrings with sparkling crystal accents from the Arwa 53 Collection." },
+  { id: "earring_6", name: "Pearl Tassel Gold Earrings", category: "Earrings", price: 410, image: "images/earrings/image_6.png", desc: "Luxurious gold drop earrings with sparkling crystal accents from the Arwa 53 Collection." },
+  { id: "earring_7", name: "Geometric Pave Earrings", category: "Earrings", price: 330, image: "images/earrings/image_7.png", desc: "Luxurious gold drop earrings with sparkling crystal accents from the Arwa 53 Collection." },
+  { id: "earring_8", name: "Sapphire Crown Jhumka Earrings", category: "Earrings", price: 520, image: "images/earrings/image_8.png", desc: "Luxurious gold drop earrings with sparkling crystal accents from the Arwa 53 Collection." },
+  { id: "earring_9", name: "Solitaire Crystal Stud Earrings", category: "Earrings", price: 250, image: "images/earrings/image_9.png", desc: "Luxurious gold drop earrings with sparkling crystal accents from the Arwa 53 Collection." },
+
+  // --- CHAINS COLLECTION (9 items) ---
+  { id: "chain_1", name: "Royal Curb Gold Chain", category: "Chains", price: 480, image: "images/chains/image_1.png", desc: "A premium handcrafted gold chain featuring intricate links from the Arwa 53 Collection." },
+  { id: "chain_2", name: "Rope Link Pendant Chain", category: "Chains", price: 520, image: "images/chains/image_2.png", desc: "A premium handcrafted gold chain featuring intricate links from the Arwa 53 Collection." },
+  { id: "chain_3", name: "Box Weave Diamond Chain", category: "Chains", price: 590, image: "images/chains/image_3.png", desc: "A premium handcrafted gold chain featuring intricate links from the Arwa 53 Collection." },
+  { id: "chain_4", name: "Figaro Gold Chain", category: "Chains", price: 450, image: "images/chains/image_4.png", desc: "A premium handcrafted gold chain featuring intricate links from the Arwa 53 Collection." },
+  { id: "chain_5", name: "Medallion Charm Chain", category: "Chains", price: 610, image: "images/chains/image_5.png", desc: "A premium handcrafted gold chain featuring intricate links from the Arwa 53 Collection." },
+  { id: "chain_6", name: "Singapore Twist Gold Chain", category: "Chains", price: 390, image: "images/chains/image_6.png", desc: "A premium handcrafted gold chain featuring intricate links from the Arwa 53 Collection." },
+  { id: "chain_7", name: "Wheat Pattern Heavy Chain", category: "Chains", price: 680, image: "images/chains/image_7.png", desc: "A premium handcrafted gold chain featuring intricate links from the Arwa 53 Collection." },
+  { id: "chain_8", name: "Double Layered Gold Chain", category: "Chains", price: 550, image: "images/chains/image_8.png", desc: "A premium handcrafted gold chain featuring intricate links from the Arwa 53 Collection." },
+  { id: "chain_9", name: "Solitaire Crystal Pendant Chain", category: "Chains", price: 430, image: "images/chains/image_9.png", desc: "A premium handcrafted gold chain featuring intricate links from the Arwa 53 Collection." },
 ];
 
 function loadProducts() {
@@ -358,7 +394,21 @@ function loadProducts() {
     const raw = localStorage.getItem('arwa53_custom_products');
     if (raw) {
       const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        const existingIds = new Set(parsed.map(p => p.id));
+        let merged = [...parsed];
+        let changed = false;
+        DEFAULT_PRODUCTS.forEach(p => {
+          if (!existingIds.has(p.id)) {
+            merged.push(p);
+            changed = true;
+          }
+        });
+        if (changed) {
+          localStorage.setItem('arwa53_custom_products', JSON.stringify(merged));
+        }
+        return merged;
+      }
     }
   } catch (e) {}
   return DEFAULT_PRODUCTS;
@@ -3107,7 +3157,128 @@ function App() {
             </div>
           </div>
         </div>
-      )}
+      {/* ── 1. RINGS COLLECTION SHOWCASE SECTION ── */}
+      <section id="rings-section" className="max-w-5xl mx-auto px-5 py-8 scroll-mt-20">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-5 gap-3">
+          <div>
+            <div
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider mb-1.5"
+              style={{ background: `${C.gold}18`, color: C.goldDark, border: `1px solid ${C.gold}35` }}
+            >
+              <Sparkles size={11} />
+              <span>Signature Collection</span>
+            </div>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", color: C.ink }} className="text-2xl sm:text-3xl font-bold tracking-tight">
+              Rings Collection
+            </h2>
+            <p className="text-xs sm:text-sm mt-0.5" style={{ color: C.inkSoft }}>
+              Handcrafted Gold & Gemstone Rings from the Arwa 53 Collection
+            </p>
+          </div>
+          <button
+            onClick={() => { setCategory('Rings'); document.getElementById('catalog-section')?.scrollIntoView({ behavior: 'smooth' }); }}
+            className="text-xs font-extrabold flex items-center gap-1 hover:underline"
+            style={{ color: C.goldDark }}
+          >
+            <span>View All Rings ({products.filter(p => p.category === 'Rings').length})</span>
+            <ChevronRight size={14} />
+          </button>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3.5">
+          {products.filter(p => p.category === 'Rings').slice(0, 8).map((product, i) => (
+            <ProductCard
+              key={product.id}
+              product={product}
+              index={i}
+              onOpen={setSelected}
+              isWishlisted={wishlist.includes(product.id)}
+              onToggleWishlist={toggleWishlist}
+            />
+          ))}
+        </div>
+      </section>
+
+      {/* ── 2. EARRINGS COLLECTION SHOWCASE SECTION ── */}
+      <section id="earrings-section" className="max-w-5xl mx-auto px-5 py-8 scroll-mt-20">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-5 gap-3">
+          <div>
+            <div
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider mb-1.5"
+              style={{ background: `${C.gold}18`, color: C.goldDark, border: `1px solid ${C.gold}35` }}
+            >
+              <Gem size={11} />
+              <span>Signature Collection</span>
+            </div>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", color: C.ink }} className="text-2xl sm:text-3xl font-bold tracking-tight">
+              Earrings Collection
+            </h2>
+            <p className="text-xs sm:text-sm mt-0.5" style={{ color: C.inkSoft }}>
+              Royal Drops, Jhumkas & Studs from the Arwa 53 Collection
+            </p>
+          </div>
+          <button
+            onClick={() => { setCategory('Earrings'); document.getElementById('catalog-section')?.scrollIntoView({ behavior: 'smooth' }); }}
+            className="text-xs font-extrabold flex items-center gap-1 hover:underline"
+            style={{ color: C.goldDark }}
+          >
+            <span>View All Earrings ({products.filter(p => p.category === 'Earrings').length})</span>
+            <ChevronRight size={14} />
+          </button>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3.5">
+          {products.filter(p => p.category === 'Earrings').slice(0, 8).map((product, i) => (
+            <ProductCard
+              key={product.id}
+              product={product}
+              index={i}
+              onOpen={setSelected}
+              isWishlisted={wishlist.includes(product.id)}
+              onToggleWishlist={toggleWishlist}
+            />
+          ))}
+        </div>
+      </section>
+
+      {/* ── 3. CHAINS COLLECTION SHOWCASE SECTION ── */}
+      <section id="chains-section" className="max-w-5xl mx-auto px-5 py-8 scroll-mt-20">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-5 gap-3">
+          <div>
+            <div
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider mb-1.5"
+              style={{ background: `${C.gold}18`, color: C.goldDark, border: `1px solid ${C.gold}35` }}
+            >
+              <Link2 size={11} />
+              <span>Signature Collection</span>
+            </div>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", color: C.ink }} className="text-2xl sm:text-3xl font-bold tracking-tight">
+              Chains Collection
+            </h2>
+            <p className="text-xs sm:text-sm mt-0.5" style={{ color: C.inkSoft }}>
+              Intricate Gold Links & Pendant Chains from the Arwa 53 Collection
+            </p>
+          </div>
+          <button
+            onClick={() => { setCategory('Chains'); document.getElementById('catalog-section')?.scrollIntoView({ behavior: 'smooth' }); }}
+            className="text-xs font-extrabold flex items-center gap-1 hover:underline"
+            style={{ color: C.goldDark }}
+          >
+            <span>View All Chains ({products.filter(p => p.category === 'Chains').length})</span>
+            <ChevronRight size={14} />
+          </button>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3.5">
+          {products.filter(p => p.category === 'Chains').slice(0, 8).map((product, i) => (
+            <ProductCard
+              key={product.id}
+              product={product}
+              index={i}
+              onOpen={setSelected}
+              isWishlisted={wishlist.includes(product.id)}
+              onToggleWishlist={toggleWishlist}
+            />
+          ))}
+        </div>
+      </section>
 
       <main id="catalog-section" className="max-w-5xl mx-auto px-5 pb-8 scroll-mt-20">
         {/* category chips */}
