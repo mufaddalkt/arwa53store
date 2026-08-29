@@ -352,11 +352,10 @@ const DEFAULT_PRODUCTS = [
   { id: "earring_8", name: "Sapphire-Tone Crown Jhumka Earrings", category: "Earrings", price: 170, image: "images/earrings/image_8.png", badge: "Bestseller", desc: "Luxurious designer drop earrings with sparkling crystal accents and gold-finish from the Arwa 53 Collection." },
   { id: "earring_9", name: "Solitaire Crystal Stud Earrings", category: "Earrings", price: 170, image: "images/earrings/image_9.png", desc: "Luxurious designer drop earrings with sparkling crystal accents and gold-finish from the Arwa 53 Collection." },
 
-  // --- CHAINS COLLECTION (9 newly uploaded items) ---
+  // --- CHAINS COLLECTION (8 items) ---
   { id: "chain_1", name: "Royal Curb Designer Chain", category: "Chains", price: 480, image: "images/chains/image_1.png", badge: "New Arrival", desc: "A premium handcrafted designer chain featuring intricate links with gold-finish from the Arwa 53 Collection." },
   { id: "chain_2", name: "Rope Link Pendant Chain", category: "Chains", price: 520, image: "images/chains/image_2.png", badge: "Signature", desc: "A premium handcrafted designer chain featuring intricate links with gold-finish from the Arwa 53 Collection." },
   { id: "chain_3", name: "Box Weave Crystal Chain", category: "Chains", price: 590, image: "images/chains/image_3.png", badge: "Bestseller", desc: "A premium handcrafted designer chain featuring intricate links with gold-finish from the Arwa 53 Collection." },
-  { id: "chain_4", name: "Figaro Designer Chain", category: "Chains", price: 450, image: "images/chains/image_4.png", desc: "A premium handcrafted designer chain featuring intricate links with gold-finish from the Arwa 53 Collection." },
   { id: "chain_5", name: "Medallion Charm Chain", category: "Chains", price: 610, image: "images/chains/image_5.png", badge: "New Arrival", desc: "A premium handcrafted designer chain featuring intricate links with gold-finish from the Arwa 53 Collection." },
   { id: "chain_6", name: "Singapore Twist Designer Chain", category: "Chains", price: 390, image: "images/chains/image_6.png", desc: "A premium handcrafted designer chain featuring intricate links with gold-finish from the Arwa 53 Collection." },
   { id: "chain_7", name: "Wheat Pattern Heavy Chain", category: "Chains", price: 680, image: "images/chains/image_7.png", badge: "Signature", desc: "A premium handcrafted designer chain featuring intricate links with gold-finish from the Arwa 53 Collection." },
@@ -405,8 +404,10 @@ function loadProducts() {
     if (raw) {
       const parsed = JSON.parse(raw);
       if (Array.isArray(parsed) && parsed.length > 0) {
+        // Filter out any deleted legacy duplicate products like chain_4
+        const filteredParsed = parsed.filter(p => p.id !== 'chain_4');
         const defaultMap = new Map(DEFAULT_PRODUCTS.map(p => [p.id, p]));
-        const updated = parsed.map(p => {
+        const updated = filteredParsed.map(p => {
           const def = defaultMap.get(p.id);
           if (def) {
             let price = def.price;
