@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
 <title>Arwa 53 Collection</title>
 <meta name="theme-color" content="#F8D5B8" />
 <link rel="icon" type="image/png" id="dynamic-favicon" />
@@ -398,8 +401,17 @@ const DEFAULT_PRODUCTS = [
   { id: "img33", name: "Abalone Heart Bracelet", category: "Bracelets", price: 320, image: PRODUCT_IMAGES.img33, desc: "A handcrafted fashion piece from the Arwa 53 Collection, designed with gold-finish and detailed stonework." },
 ];
 
+const CATALOG_BUILD_VERSION = 'arwa53_v4_20260829_mobile_sync';
+
 function loadProducts() {
   try {
+    const cachedVersion = localStorage.getItem('arwa53_build_version');
+    if (cachedVersion !== CATALOG_BUILD_VERSION) {
+      // Force sync with latest catalogue prices & items across all mobile and PC devices
+      localStorage.setItem('arwa53_build_version', CATALOG_BUILD_VERSION);
+      localStorage.removeItem('arwa53_custom_products');
+      return DEFAULT_PRODUCTS;
+    }
     const raw = localStorage.getItem('arwa53_custom_products');
     if (raw) {
       const parsed = JSON.parse(raw);
@@ -413,21 +425,13 @@ function loadProducts() {
             let price = def.price;
             if (p.isCustomPrice && p.price) {
               price = Number(p.price);
-            } else if (def.category === 'Rings') {
-              price = 200;
-            } else if (def.category === 'Earrings') {
-              price = 170;
-            } else if (def.category === 'Bracelets') {
-              price = 320;
-            } else if (p.price && !isNaN(Number(p.price))) {
-              price = Number(p.price);
             }
             return {
               ...def,
               ...p,
               price: price,
               name: p.name || def.name,
-              category: p.category || def.category,
+              category: def.category,
               desc: p.desc || def.desc,
               image: p.image || def.image,
               badge: p.badge !== undefined ? p.badge : def.badge,
