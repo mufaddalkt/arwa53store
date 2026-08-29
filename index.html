@@ -634,7 +634,7 @@ function GoldSprinkles() {
   ];
 
   return (
-    <div className="absolute inset-0 pointer-events-none overflow-hidden z-10" aria-hidden="true">
+    <div className="fixed inset-0 pointer-events-none overflow-hidden z-10" aria-hidden="true">
       {/* ── Left Side 50% Full Gold Shower (Desktop & Tablet) ── */}
       <div className="absolute left-0 top-0 bottom-0 w-1/2 hidden sm:block">
         {leftParticles.map((p, idx) => (
@@ -3290,6 +3290,9 @@ function App() {
         }
       `}</style>
 
+      {/* Global Luxury Gold Particles showering entire page from top to bottom */}
+      <GoldSprinkles />
+
       {/* header */}
       <header
         className={`sticky top-0 z-30 flex items-center justify-between px-3.5 sm:px-6 py-2.5 sm:py-3 ${scrolled ? 'header-scrolled' : ''}`}
@@ -3406,9 +3409,6 @@ function App() {
       {/* hero */}
       {!searchOpen && (
         <section className="px-5 pt-8 pb-6 text-center relative overflow-hidden">
-          {/* Ambient Luxury Gold Sprinkles on Left & Right Flanks */}
-          <GoldSprinkles />
-
           <Sparkles size={20} className="sparkle absolute top-6 left-8" style={{ color: C.gold }} />
           <Sparkles size={14} className="sparkle absolute top-14 right-10" style={{ color: C.goldLight, animationDelay: '.6s' }} />
 
