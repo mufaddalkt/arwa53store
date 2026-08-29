@@ -1147,6 +1147,7 @@ function AdminModal({
   const [activeTab, setActiveTab] = useState('products'); // 'products' | 'store' | 'backup'
   const [editingProduct, setEditingProduct] = useState(null);
   const [isAddingProduct, setIsAddingProduct] = useState(false);
+  const [adminCategory, setAdminCategory] = useState('All');
 
   // Form states for product
   const [formName, setFormName] = useState('');
@@ -1233,7 +1234,7 @@ function AdminModal({
   function openAddModal() {
     setEditingProduct(null);
     setFormName('');
-    setFormCategory('Bracelets');
+    setFormCategory(adminCategory !== 'All' ? adminCategory : 'Rings');
     setFormPrice('');
     setFormBadge('None');
     setFormDesc('');
@@ -1366,11 +1367,28 @@ function AdminModal({
     onToast('Catalog exported to JSON! 💾');
   }
 
+  const categoryCounts = useMemo(() => {
+    const counts = { All: products.length };
+    products.forEach((p) => {
+      counts[p.category] = (counts[p.category] || 0) + 1;
+    });
+    return counts;
+  }, [products]);
+
+  const adminCategoriesList = useMemo(() => {
+    const defaultList = ['All', 'Rings', 'Earrings', 'Chains', 'Bracelets'];
+    const otherCats = Array.from(new Set(products.map(p => p.category))).filter(c => !defaultList.includes(c));
+    return [...defaultList, ...otherCats];
+  }, [products]);
+
   const filteredProducts = products.filter((p) => {
-    return (
-      p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      p.category.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const term = searchTerm.toLowerCase().trim();
+    const matchesSearch = !term ||
+      p.name.toLowerCase().includes(term) ||
+      p.category.toLowerCase().includes(term) ||
+      (p.desc && p.desc.toLowerCase().includes(term));
+    const matchesCat = adminCategory === 'All' || p.category.toLowerCase() === adminCategory.toLowerCase();
+    return matchesSearch && matchesCat;
   });
 
   return (
@@ -1608,59 +1626,122 @@ function AdminModal({
                         <GoldButton onClick={openAddModal}>
                           <span className="flex items-center gap-1.5 text-xs font-bold">
                             <PlusCircle size={15} />
-                            <span>Add New Jewellery Piece</span>
+                            <span>Add New {adminCategory !== 'All' ? adminCategory.slice(0, -1) || adminCategory : 'Jewellery Piece'}</span>
                           </span>
                         </GoldButton>
                       </div>
 
-                      {/* Products List */}
-                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-                        {filteredProducts.map((p) => (
-                          <div
-                            key={p.id}
-                            className="p-3.5 rounded-2xl flex items-center gap-3 transition-all hover:shadow-md"
-                            style={{ background: '#FFFFFF', border: `1px solid rgba(201,162,39,0.2)` }}
-                          >
-                            <div className="w-14 h-14 rounded-xl overflow-hidden flex-shrink-0 border" style={{ borderColor: C.blush }}>
-                              <ProductVisual product={p} />
-                            </div>
-
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-center gap-1.5">
-                                <h4 className="font-bold text-xs truncate" style={{ color: C.ink }}>
-                                  {p.name}
-                                </h4>
-                                {p.badge && (
-                                  <span className="text-[9px] font-extrabold px-1.5 py-0.2 rounded-full" style={{ background: C.peach, color: C.goldDark }}>
-                                    {p.badge}
-                                  </span>
-                                )}
-                              </div>
-                              <p className="text-[11px] font-semibold" style={{ color: C.inkSoft }}>
-                                {p.category} • <span className="font-extrabold" style={{ color: C.goldDark }}>{formatINR(p.price)}</span>
-                              </p>
-
-                              <div className="flex items-center gap-2 mt-2">
-                                <button
-                                  onClick={() => openEditModal(p)}
-                                  className="text-[11px] font-bold px-2 py-1 rounded-lg flex items-center gap-1 hover:bg-stone-100"
-                                  style={{ color: C.ink }}
-                                >
-                                  <Edit3 size={11} />
-                                  <span>Edit</span>
-                                </button>
-                                <button
-                                  onClick={() => handleDeleteProduct(p.id, p.name)}
-                                  className="text-[11px] font-bold px-2 py-1 rounded-lg flex items-center gap-1 hover:bg-red-50 text-red-600"
-                                >
-                                  <Trash2 size={11} />
-                                  <span>Delete</span>
-                                </button>
-                              </div>
-                            </div>
-                          </div>
-                        ))}
+                      {/* ── Category Section Filter Tabs ── */}
+                      <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar" style={{ WebkitOverflowScrolling: 'touch' }}>
+                        {adminCategoriesList.map((cat) => {
+                          const count = categoryCounts[cat] || 0;
+                          const isActive = adminCategory === cat;
+                          return (
+                            <button
+                              key={cat}
+                              onClick={() => setAdminCategory(cat)}
+                              className="px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap flex items-center gap-1.5 transition-all active:scale-95 flex-shrink-0"
+                              style={{
+                                background: isActive ? `linear-gradient(135deg, ${C.goldLight}, ${C.goldDark})` : '#FFFFFF',
+                                color: isActive ? '#FFFFFF' : C.ink,
+                                border: isActive ? 'none' : `1px solid ${C.blush}`,
+                                boxShadow: isActive ? '0 4px 10px -2px rgba(201,162,39,0.4)' : 'none',
+                              }}
+                            >
+                              <span>{cat}</span>
+                              <span
+                                className="text-[10px] px-1.5 py-0.2 rounded-full font-extrabold"
+                                style={{
+                                  background: isActive ? 'rgba(255,255,255,0.25)' : C.cream,
+                                  color: isActive ? '#FFFFFF' : C.goldDark,
+                                }}
+                              >
+                                {count}
+                              </span>
+                            </button>
+                          );
+                        })}
                       </div>
+
+                      {/* Sub-header status */}
+                      <div className="flex items-center justify-between text-xs text-stone-500 font-semibold px-1">
+                        <span>
+                          Showing <span className="font-extrabold text-stone-800">{filteredProducts.length}</span> {adminCategory === 'All' ? 'total products' : `${adminCategory} items`}
+                          {searchTerm && <span> matching "<span className="italic">{searchTerm}</span>"</span>}
+                        </span>
+                        {adminCategory !== 'All' && (
+                          <button
+                            onClick={() => setAdminCategory('All')}
+                            className="text-[11px] font-bold text-amber-700 hover:underline"
+                          >
+                            View All Sections ({products.length})
+                          </button>
+                        )}
+                      </div>
+
+                      {/* Products List */}
+                      {filteredProducts.length === 0 ? (
+                        <div className="p-10 text-center rounded-3xl bg-white border border-stone-200 shadow-sm space-y-2">
+                          <Package size={36} className="mx-auto opacity-30" style={{ color: C.goldDark }} />
+                          <p className="text-sm font-bold text-stone-700">No items found in {adminCategory}</p>
+                          <p className="text-xs text-stone-400">Try changing your search term or select another section.</p>
+                          <button
+                            onClick={openAddModal}
+                            className="mt-3 px-4 py-2 rounded-xl text-xs font-bold text-white shadow-md inline-block"
+                            style={{ background: `linear-gradient(135deg, ${C.goldLight}, ${C.goldDark})` }}
+                          >
+                            + Add New {adminCategory !== 'All' ? adminCategory : 'Product'}
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                          {filteredProducts.map((p) => (
+                            <div
+                              key={p.id}
+                              className="p-3.5 rounded-2xl flex items-center gap-3 transition-all hover:shadow-md"
+                              style={{ background: '#FFFFFF', border: `1px solid rgba(201,162,39,0.2)` }}
+                            >
+                              <div className="w-14 h-14 rounded-xl overflow-hidden flex-shrink-0 border" style={{ borderColor: C.blush }}>
+                                <ProductVisual product={p} />
+                              </div>
+
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-1.5">
+                                  <h4 className="font-bold text-xs truncate" style={{ color: C.ink }}>
+                                    {p.name}
+                                  </h4>
+                                  {p.badge && (
+                                    <span className="text-[9px] font-extrabold px-1.5 py-0.2 rounded-full" style={{ background: C.peach, color: C.goldDark }}>
+                                      {p.badge}
+                                    </span>
+                                  )}
+                                </div>
+                                <p className="text-[11px] font-semibold" style={{ color: C.inkSoft }}>
+                                  {p.category} • <span className="font-extrabold" style={{ color: C.goldDark }}>{formatINR(p.price)}</span>
+                                </p>
+
+                                <div className="flex items-center gap-2 mt-2">
+                                  <button
+                                    onClick={() => openEditModal(p)}
+                                    className="text-[11px] font-bold px-2 py-1 rounded-lg flex items-center gap-1 hover:bg-stone-100"
+                                    style={{ color: C.ink }}
+                                  >
+                                    <Edit3 size={11} />
+                                    <span>Edit</span>
+                                  </button>
+                                  <button
+                                    onClick={() => handleDeleteProduct(p.id, p.name)}
+                                    className="text-[11px] font-bold px-2 py-1 rounded-lg flex items-center gap-1 hover:bg-red-50 text-red-600"
+                                  >
+                                    <Trash2 size={11} />
+                                    <span>Delete</span>
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </>
                   ) : (
                     /* Add / Edit Form with Enlarged Product Photo on Left */
