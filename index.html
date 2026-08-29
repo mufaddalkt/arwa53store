@@ -556,6 +556,196 @@ function ShimmerText({ children, size = '1.9rem', as = 'div' }) {
   );
 }
 
+function GoldSprinkles() {
+  const leftParticles = [
+    { type: 'star', top: '7%', left: '4%', size: 18, delay: '0s', dur: '3.4s' },
+    { type: 'orb', top: '13%', left: '14%', size: 6, delay: '0.8s', dur: '4.2s' },
+    { type: 'star', top: '21%', left: '7%', size: 14, delay: '1.5s', dur: '2.9s' },
+    { type: 'dust', top: '27%', left: '19%', size: 3.5, delay: '0.3s', dur: '5.1s' },
+    { type: 'orb', top: '35%', left: '9%', size: 8, delay: '2.1s', dur: '4.8s' },
+    { type: 'star', top: '43%', left: '16%', size: 16, delay: '1.1s', dur: '3.7s' },
+    { type: 'dust', top: '51%', left: '5%', size: 4, delay: '2.7s', dur: '4.5s' },
+    { type: 'ring', top: '59%', left: '12%', size: 22, delay: '1.9s', dur: '6.2s' },
+    { type: 'star', top: '67%', left: '6%', size: 13, delay: '0.6s', dur: '3.2s' },
+    { type: 'orb', top: '74%', left: '17%', size: 5, delay: '3.1s', dur: '4.9s' },
+    { type: 'dust', top: '81%', left: '8%', size: 3.5, delay: '1.4s', dur: '5.5s' },
+    { type: 'star', top: '89%', left: '15%', size: 15, delay: '2.4s', dur: '3.5s' },
+    { type: 'orb', top: '17%', left: '23%', size: 7, delay: '1.7s', dur: '4.4s' },
+    { type: 'dust', top: '47%', left: '24%', size: 3, delay: '2.9s', dur: '5.2s' },
+    { type: 'star', top: '77%', left: '22%', size: 12, delay: '0.9s', dur: '3.8s' },
+  ];
+
+  const rightParticles = [
+    { type: 'star', top: '9%', right: '5%', size: 16, delay: '0.4s', dur: '3.1s' },
+    { type: 'orb', top: '15%', right: '15%', size: 7, delay: '1.2s', dur: '4.6s' },
+    { type: 'dust', top: '23%', right: '8%', size: 4, delay: '2.2s', dur: '5.3s' },
+    { type: 'star', top: '31%', right: '19%', size: 15, delay: '0.7s', dur: '3.6s' },
+    { type: 'ring', top: '39%', right: '10%', size: 24, delay: '2.5s', dur: '6.5s' },
+    { type: 'orb', top: '47%', right: '17%', size: 6, delay: '1.6s', dur: '4.1s' },
+    { type: 'star', top: '55%', right: '6%', size: 18, delay: '2.8s', dur: '3.3s' },
+    { type: 'dust', top: '63%', right: '14%', size: 3.5, delay: '0.5s', dur: '4.7s' },
+    { type: 'star', top: '71%', right: '9%', size: 13, delay: '1.8s', dur: '3.0s' },
+    { type: 'orb', top: '79%', right: '18%', size: 8, delay: '2.3s', dur: '5.0s' },
+    { type: 'dust', top: '85%', right: '7%', size: 4, delay: '1.0s', dur: '4.8s' },
+    { type: 'star', top: '91%', right: '13%', size: 14, delay: '3.3s', dur: '3.7s' },
+    { type: 'orb', top: '19%', right: '23%', size: 5, delay: '1.9s', dur: '4.3s' },
+    { type: 'dust', top: '49%', right: '25%', size: 3, delay: '0.8s', dur: '5.4s' },
+    { type: 'star', top: '75%', right: '23%', size: 12, delay: '2.6s', dur: '3.5s' },
+  ];
+
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden z-10" aria-hidden="true">
+      {/* Left Flank Luxury Gold Sprinkles (Desktop & Tablets) */}
+      <div className="absolute left-0 top-0 bottom-0 w-[32%] max-w-sm hidden sm:block">
+        {leftParticles.map((p, idx) => (
+          <div
+            key={`left-${idx}`}
+            className="absolute"
+            style={{
+              top: p.top,
+              left: p.left,
+              animation: p.type === 'star'
+                ? `goldTwinkleStar ${p.dur} ease-in-out infinite ${p.delay}`
+                : p.type === 'orb'
+                ? `goldFloatSlow ${p.dur} ease-in-out infinite ${p.delay}`
+                : p.type === 'ring'
+                ? `goldDriftSlow ${p.dur} ease-in-out infinite ${p.delay}`
+                : `goldFloatMedium ${p.dur} ease-in-out infinite ${p.delay}`,
+            }}
+          >
+            {p.type === 'star' && (
+              <svg width={p.size} height={p.size} viewBox="0 0 24 24" fill="none" style={{ filter: 'drop-shadow(0 0 6px rgba(201,162,39,0.85))' }}>
+                <path d="M12 0L14.5 9.5L24 12L14.5 14.5L12 24L9.5 14.5L0 12L9.5 9.5Z" fill="url(#goldStarGradLeft)" />
+                <defs>
+                  <linearGradient id="goldStarGradLeft" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#FFFDF6" />
+                    <stop offset="45%" stopColor="#E8C468" />
+                    <stop offset="100%" stopColor="#C9A227" />
+                  </linearGradient>
+                </defs>
+              </svg>
+            )}
+            {p.type === 'orb' && (
+              <div
+                className="rounded-full"
+                style={{
+                  width: `${p.size}px`,
+                  height: `${p.size}px`,
+                  background: 'radial-gradient(circle, #FFFDF6 20%, #E8C468 60%, #C9A227 100%)',
+                  boxShadow: '0 0 10px 2px rgba(232,196,104,0.75), 0 0 4px rgba(201,162,39,0.9)',
+                }}
+              />
+            )}
+            {p.type === 'dust' && (
+              <div
+                className="rounded-full"
+                style={{
+                  width: `${p.size}px`,
+                  height: `${p.size}px`,
+                  background: '#E8C468',
+                  boxShadow: '0 0 6px 1.5px rgba(201,162,39,0.8)',
+                }}
+              />
+            )}
+            {p.type === 'ring' && (
+              <div
+                className="rounded-full border border-amber-300/40"
+                style={{
+                  width: `${p.size}px`,
+                  height: `${p.size}px`,
+                  boxShadow: '0 0 8px rgba(201,162,39,0.25)',
+                }}
+              />
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* Right Flank Luxury Gold Sprinkles (Desktop & Tablets) */}
+      <div className="absolute right-0 top-0 bottom-0 w-[32%] max-w-sm hidden sm:block">
+        {rightParticles.map((p, idx) => (
+          <div
+            key={`right-${idx}`}
+            className="absolute"
+            style={{
+              top: p.top,
+              right: p.right,
+              animation: p.type === 'star'
+                ? `goldTwinkleStar ${p.dur} ease-in-out infinite ${p.delay}`
+                : p.type === 'orb'
+                ? `goldFloatSlow ${p.dur} ease-in-out infinite ${p.delay}`
+                : p.type === 'ring'
+                ? `goldDriftSlow ${p.dur} ease-in-out infinite ${p.delay}`
+                : `goldFloatMedium ${p.dur} ease-in-out infinite ${p.delay}`,
+            }}
+          >
+            {p.type === 'star' && (
+              <svg width={p.size} height={p.size} viewBox="0 0 24 24" fill="none" style={{ filter: 'drop-shadow(0 0 6px rgba(201,162,39,0.85))' }}>
+                <path d="M12 0L14.5 9.5L24 12L14.5 14.5L12 24L9.5 14.5L0 12L9.5 9.5Z" fill="url(#goldStarGradRight)" />
+                <defs>
+                  <linearGradient id="goldStarGradRight" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#FFFDF6" />
+                    <stop offset="45%" stopColor="#E8C468" />
+                    <stop offset="100%" stopColor="#C9A227" />
+                  </linearGradient>
+                </defs>
+              </svg>
+            )}
+            {p.type === 'orb' && (
+              <div
+                className="rounded-full"
+                style={{
+                  width: `${p.size}px`,
+                  height: `${p.size}px`,
+                  background: 'radial-gradient(circle, #FFFDF6 20%, #E8C468 60%, #C9A227 100%)',
+                  boxShadow: '0 0 10px 2px rgba(232,196,104,0.75), 0 0 4px rgba(201,162,39,0.9)',
+                }}
+              />
+            )}
+            {p.type === 'dust' && (
+              <div
+                className="rounded-full"
+                style={{
+                  width: `${p.size}px`,
+                  height: `${p.size}px`,
+                  background: '#E8C468',
+                  boxShadow: '0 0 6px 1.5px rgba(201,162,39,0.8)',
+                }}
+              />
+            )}
+            {p.type === 'ring' && (
+              <div
+                className="rounded-full border border-amber-300/40"
+                style={{
+                  width: `${p.size}px`,
+                  height: `${p.size}px`,
+                  boxShadow: '0 0 8px rgba(201,162,39,0.25)',
+                }}
+              />
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* Mobile Subtle Sparkles */}
+      <div className="sm:hidden absolute inset-0">
+        <div className="absolute top-6 left-3" style={{ animation: 'goldTwinkleStar 3.1s ease-in-out infinite' }}>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="#E8C468" style={{ filter: 'drop-shadow(0 0 4px #C9A227)' }}>
+            <path d="M12 0L14.5 9.5L24 12L14.5 14.5L12 24L9.5 14.5L0 12L9.5 9.5Z" />
+          </svg>
+        </div>
+        <div className="absolute top-14 right-4" style={{ animation: 'goldTwinkleStar 3.6s ease-in-out infinite 0.9s' }}>
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="#E8C468" style={{ filter: 'drop-shadow(0 0 4px #C9A227)' }}>
+            <path d="M12 0L14.5 9.5L24 12L14.5 14.5L12 24L9.5 14.5L0 12L9.5 9.5Z" />
+          </svg>
+        </div>
+        <div className="absolute top-48 left-2 w-1.5 h-1.5 rounded-full bg-amber-300 shadow-[0_0_6px_#C9A227]" style={{ animation: 'goldFloatSlow 4.2s ease-in-out infinite 1.4s' }} />
+        <div className="absolute top-64 right-2 w-2 h-2 rounded-full bg-amber-300 shadow-[0_0_6px_#C9A227]" style={{ animation: 'goldFloatSlow 4.6s ease-in-out infinite 2.1s' }} />
+      </div>
+    </div>
+  );
+}
+
 /* Product tile — shows the real photo on a branded backdrop; falls back to a
    gradient + icon tile for any product without a photo. */
 function ProductVisual({ product, size = 'normal' }) {
@@ -3017,6 +3207,27 @@ function App() {
         /* category chip press */
         .chip-btn { transition: transform .15s cubic-bezier(.34,1.56,.64,1), background .2s, border-color .2s, box-shadow .2s; }
         .chip-btn:active { transform: scale(0.94); }
+
+        /* gold particle sprinkling animations */
+        @keyframes goldFloatSlow {
+          0% { transform: translateY(0px) translateX(0px) rotate(0deg) scale(0.9); opacity: 0.25; }
+          50% { transform: translateY(-22px) translateX(8px) rotate(180deg) scale(1.15); opacity: 0.95; }
+          100% { transform: translateY(-45px) translateX(-4px) rotate(360deg) scale(0.85); opacity: 0.2; }
+        }
+        @keyframes goldFloatMedium {
+          0% { transform: translateY(0px) translateX(0px) rotate(0deg) scale(0.8); opacity: 0.3; }
+          50% { transform: translateY(-16px) translateX(-7px) rotate(-90deg) scale(1.1); opacity: 0.95; }
+          100% { transform: translateY(-34px) translateX(5px) rotate(-180deg) scale(0.75); opacity: 0.25; }
+        }
+        @keyframes goldTwinkleStar {
+          0%, 100% { transform: scale(0.65) rotate(0deg); opacity: 0.2; filter: drop-shadow(0 0 2px rgba(201,162,39,0.3)); }
+          50% { transform: scale(1.3) rotate(45deg); opacity: 1; filter: drop-shadow(0 0 10px rgba(232,196,104,0.95)) drop-shadow(0 0 4px rgba(255,255,255,0.85)); }
+        }
+        @keyframes goldDriftSlow {
+          0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.25; }
+          33% { transform: translate(10px, -12px) scale(1.08); opacity: 0.7; }
+          66% { transform: translate(-8px, -20px) scale(0.95); opacity: 0.4; }
+        }
       `}</style>
 
       {/* header */}
@@ -3135,6 +3346,9 @@ function App() {
       {/* hero */}
       {!searchOpen && (
         <section className="px-5 pt-8 pb-6 text-center relative overflow-hidden">
+          {/* Ambient Luxury Gold Sprinkles on Left & Right Flanks */}
+          <GoldSprinkles />
+
           <Sparkles size={20} className="sparkle absolute top-6 left-8" style={{ color: C.gold }} />
           <Sparkles size={14} className="sparkle absolute top-14 right-10" style={{ color: C.goldLight, animationDelay: '.6s' }} />
 
