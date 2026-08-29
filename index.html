@@ -409,11 +409,19 @@ function loadProducts() {
         const updated = parsed.map(p => {
           const def = defaultMap.get(p.id);
           if (def) {
-            const price = def.category === 'Bracelets' ? 320 : (def.price || p.price);
-            return { ...p, desc: def.desc, name: def.name, category: def.category, image: def.image, badge: def.badge || p.badge, price: price };
-          }
-          if (p.category === 'Bracelets') {
-            return { ...p, price: 320 };
+            // Keep user price if valid number, otherwise fallback to default
+            const hasUserPrice = p.price !== undefined && p.price !== null && !isNaN(Number(p.price)) && Number(p.price) > 0;
+            const price = hasUserPrice ? Number(p.price) : def.price;
+            return {
+              ...def,
+              ...p,
+              price: price,
+              name: p.name || def.name,
+              category: p.category || def.category,
+              desc: p.desc || def.desc,
+              image: p.image || def.image,
+              badge: p.badge !== undefined ? p.badge : def.badge,
+            };
           }
           return p;
         });
@@ -1175,7 +1183,29 @@ function AdminModal({
     }
   }, [isOpen]);
 
-  if (!isOpen) return null;
+  const categoryCounts = useMemo(() => {
+    const counts = { All: (products || []).length };
+    (products || []).forEach((p) => {
+      counts[p.category] = (counts[p.category] || 0) + 1;
+    });
+    return counts;
+  }, [products]);
+
+  const adminCategoriesList = useMemo(() => {
+    const defaultList = ['All', 'Rings', 'Earrings', 'Chains', 'Bracelets'];
+    const otherCats = Array.from(new Set((products || []).map(p => p.category))).filter(c => !defaultList.includes(c));
+    return [...defaultList, ...otherCats];
+  }, [products]);
+
+  const filteredProducts = (products || []).filter((p) => {
+    const term = searchTerm.toLowerCase().trim();
+    const matchesSearch = !term ||
+      p.name.toLowerCase().includes(term) ||
+      p.category.toLowerCase().includes(term) ||
+      (p.desc && p.desc.toLowerCase().includes(term));
+    const matchesCat = adminCategory === 'All' || p.category.toLowerCase() === adminCategory.toLowerCase();
+    return matchesSearch && matchesCat;
+  });
 
   async function handleLogin(e) {
     if (e) e.preventDefault();
@@ -1367,29 +1397,7 @@ function AdminModal({
     onToast('Catalog exported to JSON! 💾');
   }
 
-  const categoryCounts = useMemo(() => {
-    const counts = { All: products.length };
-    products.forEach((p) => {
-      counts[p.category] = (counts[p.category] || 0) + 1;
-    });
-    return counts;
-  }, [products]);
-
-  const adminCategoriesList = useMemo(() => {
-    const defaultList = ['All', 'Rings', 'Earrings', 'Chains', 'Bracelets'];
-    const otherCats = Array.from(new Set(products.map(p => p.category))).filter(c => !defaultList.includes(c));
-    return [...defaultList, ...otherCats];
-  }, [products]);
-
-  const filteredProducts = products.filter((p) => {
-    const term = searchTerm.toLowerCase().trim();
-    const matchesSearch = !term ||
-      p.name.toLowerCase().includes(term) ||
-      p.category.toLowerCase().includes(term) ||
-      (p.desc && p.desc.toLowerCase().includes(term));
-    const matchesCat = adminCategory === 'All' || p.category.toLowerCase() === adminCategory.toLowerCase();
-    return matchesSearch && matchesCat;
-  });
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6" style={{ background: 'rgba(43,31,20,0.85)', backdropFilter: 'blur(8px)' }}>
